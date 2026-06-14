@@ -1,14 +1,19 @@
 // ══════════════════════════════════════════════════════════════
-// Home Page — Server Component wrapper for the Memory World
+// MEMORY ALBUM — GSAP Configuration
+// Centralized plugin registration (SSR-safe)
 // ══════════════════════════════════════════════════════════════
 
-import MemoryApp from '@/components/MemoryApp';
+'use client';
 
-export default function HomePage() {
-  return (
-    <main id="memory-album-main" role="main">
-      <h1 className="visually-hidden">Memory Album — Interactive 3D Memory Experience</h1>
-      <MemoryApp />
-    </main>
-  );
+import gsap from 'gsap';
+
+// Only register on client
+if (typeof window !== 'undefined') {
+  // GSAP defaults for the memory album aesthetic
+  gsap.defaults({
+    ease: 'power2.inOut',
+    duration: 1,
+  });
 }
+
+export { gsap };

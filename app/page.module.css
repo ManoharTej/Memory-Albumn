@@ -1,142 +1,366 @@
-.page {
-  --background: #fafafa;
-  --foreground: #fff;
+/* ══════════════════════════════════════════════════════════════
+   MEMORY ALBUM — Page-level styles
+   ══════════════════════════════════════════════════════════════ */
 
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
+/* ── Phase 4: UI Overlay ── */
+.uiOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
   display: flex;
-  flex: 1;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-}
-
-.main {
-  display: flex;
-  flex: 1;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
   justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
 }
 
-.intro {
+.topBar {
+  pointer-events: auto;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent);
 }
 
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
+.backButton {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s;
 }
 
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
+.backButton:hover {
+  background: rgba(255,255,255,0.1);
 }
 
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
-  gap: 16px;
-  font-size: 14px;
-}
-
-.ctas a {
+.titleEditor {
+  flex-grow: 1;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
+}
+
+.titleText {
+  color: #d4af37;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin: 0;
   cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+.editIcon {
+  font-size: 1rem;
+  opacity: 0.3;
+  transition: opacity 0.2s;
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.titleText:hover .editIcon {
+  opacity: 1;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
+.titleInput {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid #d4af37;
+  color: #d4af37;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  text-align: center;
+  outline: none;
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
+.navArrows {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 2rem;
+  pointer-events: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
+.navButton {
+  pointer-events: auto;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #fff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.navButton:hover:not(:disabled) {
+  background: rgba(255,255,255,0.1);
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+.navButton:disabled {
+  opacity: 0.2;
+  cursor: not-allowed;
+}
+
+/* ── Phase 5: Book Content Layout ── */
+.bookContentOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%; /* Matches book proportion approx */
+  height: 60%;
+  display: flex;
+  pointer-events: none;
+}
+
+.pageLeft, .pageRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+.photoFrame {
+  background: white;
+  padding: 1rem 1rem 3rem 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  border-radius: 2px;
+  transform: rotate(-2deg);
+  transition: transform 0.3s;
+  pointer-events: auto;
+}
+
+.pageRight .photoFrame {
+  transform: rotate(3deg);
+}
+
+.photoFrame:hover {
+  transform: scale(1.05) rotate(0deg);
+  z-index: 2;
+}
+
+.photoImage {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.photoCaption {
+  font-family: 'Playfair Display', serif;
+  color: #222;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-top: -2rem;
+  margin-bottom: 0;
+}
+
+.photoDate {
+  font-family: sans-serif;
+  color: #666;
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ── Phase 6: Creation Dashboard ── */
+.createBtn {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  background: #d4af37;
+  color: #111;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(212,175,55,0.3);
+  transition: all 0.2s;
+  pointer-events: auto;
+  z-index: 20;
+}
+
+.createBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(212,175,55,0.5);
+}
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: auto;
+}
+
+.modalContent {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  padding: 3rem;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+.modalTitle {
+  color: #d4af37;
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin-top: 0;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.inputGroup label {
+  color: #aaa;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.textInput {
+  background: #000;
+  border: 1px solid #333;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.textInput:focus {
+  border-color: #d4af37;
+}
+
+.uploadArea {
+  background: #000;
+  border: 2px dashed #333;
+  color: #888;
+  padding: 2rem;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.uploadArea:hover {
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+.modalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.cancelBtn {
+  background: transparent;
+  border: 1px solid #444;
+  color: #aaa;
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cancelBtn:hover {
+  background: #222;
+  color: #fff;
+}
+
+.submitBtn {
+  background: #d4af37;
+  color: #000;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: #f0c950;
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.heartsContainer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.floatingHeart {
+  position: absolute;
+  bottom: -20%;
+  animation-name: floatUp;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px rgba(255, 100, 150, 0.5));
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(0.8) rotate(0deg);
+    opacity: 0;
   }
-
-  .page {
-    --background: #000;
-    --foreground: #000;
-
-    --text-primary: #ededed;
-    --text-secondary: #999;
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
+  20% {
+    opacity: 0.8;
+  }
+  80% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-120vh) scale(1.2) rotate(360deg);
+    opacity: 0;
   }
 }
