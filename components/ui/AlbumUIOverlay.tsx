@@ -16,6 +16,8 @@ export default function AlbumUIOverlay() {
   
   const [isEditing, setIsEditing] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  
+  const isReceiverMode = useMemoryStore((s) => s.isReceiverMode);
 
   if (zoomedFrame) {
     return (
@@ -25,7 +27,6 @@ export default function AlbumUIOverlay() {
             &larr; Back
           </button>
         </div>
-        <FloatingHearts />
       </div>
     );
   }

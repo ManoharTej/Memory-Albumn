@@ -5,6 +5,7 @@
 import { create } from 'zustand';
 import { DEMO_ALBUMS } from '@/lib/constants';
 import type { AppScene, MemoryAlbum, DeviceTier } from '@/types';
+import { shareAlbumToKV, fetchAlbumFromKV } from '@/app/actions';
 
 interface MemoryState {
   // App Scene
@@ -40,6 +41,18 @@ interface MemoryState {
   addAlbum: (album: MemoryAlbum) => void;
   currentAlbum: MemoryAlbum | null;
   setCurrentAlbum: (album: MemoryAlbum | null) => void;
+  
+  // URL Routing States
+  isReceiverMode: boolean;
+  setIsReceiverMode: (isReceiver: boolean) => void;
+  isCapturing: boolean;
+  setIsCapturing: (val: boolean) => void;
+  isExpired: boolean;
+  setIsExpired: (expired: boolean) => void;
+
+  // Cloud
+  shareAlbumToCloud: (album: MemoryAlbum) => Promise<string>;
+  fetchSharedAlbum: (id: string) => Promise<void>;
 
   // Pages
   currentPage: number;
@@ -58,15 +71,21 @@ interface MemoryState {
   setLetterPhase: (phase: 'closed' | 'open' | 'reading') => void;
   frameDoorsOpen: boolean;
   setFrameDoorsOpen: (isOpen: boolean) => void;
+
+  // Screenshot
+  screenshotRequested: boolean;
+  requestScreenshot: (callback: (url: string) => void) => void;
+  screenshotCallback: ((url: string) => void) | null;
+  clearScreenshotRequest: () => void;
 }
 
 export const useMemoryStore = create<MemoryState>((set) => ({
   // Navigation
-  scene: 'album',
+  scene: 'loading',
   setScene: (scene) => set({ scene }),
   
   // Loading state
-  isLoaded: true,
+  isLoaded: false,
   setIsLoaded: (loaded) => set({ isLoaded: loaded }),
   loadingProgress: 0,
   setLoadingProgress: (progress) => set({ loadingProgress: progress }),
@@ -99,6 +118,59 @@ export const useMemoryStore = create<MemoryState>((set) => ({
   currentAlbum: null,
   setCurrentAlbum: (album) => set({ currentAlbum: album }),
 
+  // URL Routing States
+  isReceiverMode: false,
+  setIsReceiverMode: (isReceiver) => set({ isReceiverMode: isReceiver }),
+  isCapturing: false,
+  setIsCapturing: (val) => set({ isCapturing: val }),
+  isExpired: false,
+  setIsExpired: (expired) => set({ isExpired: expired }),
+
+  // Cloud Actions
+  shareAlbumToCloud: async (album) => {
+    try {
+      const res = await shareAlbumToKV(album);
+      if (!res.success) throw new Error(res.error);
+      return album.id;
+    } catch (error) {
+      console.error("⚠️ Failed to save album to KV:", error);
+      throw error;
+    }
+  },
+  
+  fetchSharedAlbum: async (id) => {
+    try {
+      const fetchedAlbum = await fetchAlbumFromKV(id);
+      
+      if (fetchedAlbum) {
+        
+        // Check 7-day expiration (7 days = 7 * 24 * 60 * 60 * 1000 = 604,800,000 ms)
+        const SEVEN_DAYS = 604800000;
+        const now = Date.now();
+        if (now - fetchedAlbum.createdAt > SEVEN_DAYS) {
+          throw new Error("EXPIRED");
+        }
+        
+        // Album is valid, add it to local state and select it
+        set((state) => {
+          // If we already have it, don't duplicate
+          const exists = state.albums.find(a => a.id === id);
+          if (exists) return { currentAlbum: fetchedAlbum };
+          
+          return {
+            albums: [...state.albums, fetchedAlbum],
+            currentAlbum: fetchedAlbum
+          };
+        });
+      } else {
+        throw new Error("NOT_FOUND");
+      }
+    } catch (error) {
+      console.error("Error fetching album:", error);
+      throw error;
+    }
+  },
+
   // Pages
   currentPage: 0,
   setCurrentPage: (page) => set({ currentPage: page }),
@@ -116,4 +188,9 @@ export const useMemoryStore = create<MemoryState>((set) => ({
 
   frameDoorsOpen: true,
   setFrameDoorsOpen: (isOpen) => set({ frameDoorsOpen: isOpen }),
+  // Screenshot
+  screenshotRequested: false,
+  screenshotCallback: null,
+  requestScreenshot: (callback) => set({ screenshotRequested: true, screenshotCallback: callback }),
+  clearScreenshotRequest: () => set({ screenshotRequested: false, screenshotCallback: null }),
 }));

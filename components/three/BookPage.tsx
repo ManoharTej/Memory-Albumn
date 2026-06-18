@@ -32,7 +32,7 @@ function PolaroidContent({ memory, isZoomed }: { memory: MemoryItem, isZoomed?: 
 
   useEffect(() => {
     if (isZoomed) {
-      setDisplayText(""); 
+      setDisplayText("");
       const timer = setTimeout(() => {
         let currentText = "";
         let i = 0;
@@ -43,7 +43,7 @@ function PolaroidContent({ memory, isZoomed }: { memory: MemoryItem, isZoomed?: 
           if (i >= fullText.length) {
             clearInterval(interval);
           }
-        }, 50); 
+        }, 50);
         return () => clearInterval(interval);
       }, 2000); // Start typing when hearts pop
       return () => clearTimeout(timer);
@@ -53,7 +53,7 @@ function PolaroidContent({ memory, isZoomed }: { memory: MemoryItem, isZoomed?: 
   }, [isZoomed, fullText]);
 
   useFrame((_, delta) => {
-    const target = isZoomed ? 0.8 : 0;
+    const target = isZoomed ? 0.8 : 0; // Reverted back to 0 so it blends naturally with shadows
     if (frameMatRef.current) {
       frameMatRef.current.emissiveIntensity = THREE.MathUtils.lerp(frameMatRef.current.emissiveIntensity, target, delta * 5);
     }
@@ -61,12 +61,12 @@ function PolaroidContent({ memory, isZoomed }: { memory: MemoryItem, isZoomed?: 
       photoMatRef.current.emissiveIntensity = THREE.MathUtils.lerp(photoMatRef.current.emissiveIntensity, target, delta * 5);
     }
   });
-  
+
   // Full-page sizing
   const maxW = 1.2;
   const maxH = 1.2;
   const ratio = texture.image.width / texture.image.height;
-  
+
   let w = maxW;
   let h = maxH;
   if (ratio > 1) {
@@ -82,32 +82,32 @@ function PolaroidContent({ memory, isZoomed }: { memory: MemoryItem, isZoomed?: 
     <>
       <mesh receiveShadow castShadow>
         <planeGeometry args={[frameW, frameH]} />
-        <meshStandardMaterial 
+        <meshStandardMaterial
           ref={frameMatRef}
-          color="#ffffff" 
-          roughness={0.9} 
+          color="#ffffff"
+          roughness={0.9}
           emissive="#ffffff"
           emissiveIntensity={0}
         />
       </mesh>
-      
+
       {/* Shift photo slightly up to leave room for text at bottom */}
       <mesh position={[0, 0.12, 0.001]}>
         <planeGeometry args={[w, h]} />
-        <meshStandardMaterial 
+        <meshStandardMaterial
           ref={photoMatRef}
-          map={texture} 
-          roughness={0.5} 
+          map={texture}
+          roughness={0.5}
           emissiveMap={texture}
           emissive="#ffffff"
           emissiveIntensity={0}
         />
       </mesh>
 
-      <Text 
-        position={[0, -frameH / 2 + 0.12, 0.001]} 
-        fontSize={Math.max(0.045, w * 0.05)} 
-        color="#000000" 
+      <Text
+        position={[0, -frameH / 2 + 0.12, 0.001]}
+        fontSize={Math.max(0.045, w * 0.05)}
+        color="#000000"
         maxWidth={w * 0.9}
         textAlign="center"
         lineHeight={1.2}
@@ -122,7 +122,7 @@ function Polaroid3D({ memory, position, rotation }: { memory: MemoryItem, positi
   const { camera } = useThree();
   const zoomedMemoryId = useMemoryStore(s => s.zoomedMemoryId);
   const setZoomedMemory = useMemoryStore(s => s.setZoomedMemory);
-  
+
   const isZoomed = zoomedMemoryId === memory.id;
   const groupRef = useRef<THREE.Group>(null);
   const bgMatRef = useRef<THREE.MeshBasicMaterial>(null);
@@ -156,7 +156,7 @@ function Polaroid3D({ memory, position, rotation }: { memory: MemoryItem, positi
       const camDir = new THREE.Vector3();
       camera.getWorldPosition(camPos);
       camera.getWorldDirection(camDir);
-      
+
       const worldTarget = camPos.clone().add(camDir.clone().multiplyScalar(1.45));
       const localTarget = worldTarget.applyMatrix4(parentInv);
 
@@ -164,7 +164,7 @@ function Polaroid3D({ memory, position, rotation }: { memory: MemoryItem, positi
       camera.getWorldQuaternion(camQuat);
       const parentQuat = new THREE.Quaternion();
       parent.getWorldQuaternion(parentQuat);
-      
+
       const localQuat = parentQuat.clone().invert().multiply(camQuat);
       const localEuler = new THREE.Euler().setFromQuaternion(localQuat);
 
@@ -200,8 +200,8 @@ function Polaroid3D({ memory, position, rotation }: { memory: MemoryItem, positi
   }, [isZoomed, camera, position, rotation]);
 
   return (
-    <group 
-      position={position} 
+    <group
+      position={position}
       rotation={rotation}
       onClick={handleClick}
     >
@@ -401,11 +401,11 @@ function LetterPage3D({ position, rotation, letterConfig, isActive }: { position
           <group position={[0, -0.05, 0]}>
             <mesh ref={paperRef} position={[0, 0, 0.001]} scale={[1, 0.2, 1]} receiveShadow castShadow>
               <planeGeometry args={[0.55, 0.55]} />
-              <meshStandardMaterial 
-                color="#ffeb3b" 
-                emissive="#ffeb3b" 
-                emissiveIntensity={phase === 'reading' ? 0.6 : 0.25} 
-                roughness={0.85} 
+              <meshStandardMaterial
+                color="#ffeb3b"
+                emissive="#ffeb3b"
+                emissiveIntensity={phase === 'reading' ? 0.6 : 0.25}
+                roughness={0.85}
               />
             </mesh>
             <mesh position={[0, 0.05, 0.0015]} scale={[1, 0.2, 1]}>
@@ -432,11 +432,11 @@ function LetterPage3D({ position, rotation, letterConfig, isActive }: { position
             <group ref={letterRef} position={[0, 0, 0.0005]}>
               <mesh receiveShadow castShadow>
                 <boxGeometry args={[letW, letH, 0.0001]} />
-                <meshStandardMaterial 
-                  color={letterColor} 
-                  roughness={0.8} 
+                <meshStandardMaterial
+                  color={letterColor}
+                  roughness={0.8}
                   emissive={letterColor}
-                  emissiveIntensity={phase === 'reading' ? 0.6 : 0.05} 
+                  emissiveIntensity={phase === 'reading' ? 0.6 : 0.05}
                 />
               </mesh>
               <Text
@@ -508,7 +508,7 @@ function LetterPage3D({ position, rotation, letterConfig, isActive }: { position
 
 export default function BookPage({ index, totalPages, isFlipped, isActive, bookWidth, bookHeight, bookDepth, pageInset, frontMemory, backMemory, isLetterPage, letterConfig }: BookPageProps) {
   const hingeRef = useRef<THREE.Group>(null);
-  
+
   const pageWidth = bookWidth - pageInset * 2;
   // Dynamically scale page thickness so 32 pages perfectly fill the entire book depth
   const pageThickness = Math.min(0.0085, 0.26 / Math.max(1, totalPages));
@@ -546,19 +546,19 @@ export default function BookPage({ index, totalPages, isFlipped, isActive, bookW
   return (
     // Hinge at the page's OWN Y. No subgroup offset needed.
     // +PI rotation mirrors page from right to left at the same height level.
-    <group 
-      ref={hingeRef} 
+    <group
+      ref={hingeRef}
       position={[-0.64, pageLocalY, 0]}
     >
-      <mesh 
-        position={[meshPositionX, 0, 0]} 
-        castShadow 
+      <mesh
+        position={[meshPositionX, 0, 0]}
+        castShadow
         receiveShadow
       >
         <boxGeometry args={[actualPageWidth, pageThickness, pageDepth]} />
         <meshStandardMaterial color={isLetterPage ? "#f4e4bc" : "#f8f9fa"} roughness={0.8} />
       </mesh>
-      
+
       {/* Punched Holes */}
       {Array.from({ length: 24 }).map((_, i) => {
         const z = -pageDepth / 2 + 0.05 + i * ((pageDepth - 0.1) / 23);
@@ -572,17 +572,17 @@ export default function BookPage({ index, totalPages, isFlipped, isActive, bookW
 
       {/* ── Content ── */}
       {frontMemory && (
-        <Polaroid3D 
-          memory={frontMemory} 
-          position={[meshPositionX, pageThickness / 2 + 0.001, 0]} 
-          rotation={[0, 0, 0]} 
+        <Polaroid3D
+          memory={frontMemory}
+          position={[meshPositionX, pageThickness / 2 + 0.001, 0]}
+          rotation={[0, 0, 0]}
         />
       )}
       {backMemory && (
-        <Polaroid3D 
-          memory={backMemory} 
-          position={[meshPositionX, -pageThickness / 2 - 0.001, 0]} 
-          rotation={[0, 0, Math.PI]} 
+        <Polaroid3D
+          memory={backMemory}
+          position={[meshPositionX, -pageThickness / 2 - 0.001, 0]}
+          rotation={[0, 0, Math.PI]}
         />
       )}
       {isLetterPage && letterConfig && (

@@ -5,7 +5,6 @@ import { Text, Html } from '@react-three/drei';
 import type { MemoryAlbum } from '@/types';
 import { gsap } from '@/lib/gsapConfig';
 import { useMemoryStore } from '@/stores/useMemoryStore';
-import AnimeButterfly from '@/components/ui/AnimeButterfly';
 
 interface WoodenPhotoFrameProps {
   album: MemoryAlbum;
@@ -120,14 +119,6 @@ export default function WoodenPhotoFrame({ album, position = [0, 0, 0], rotation
       onPointerLeave={(e) => { e.stopPropagation(); setHovered(false); document.body.style.cursor = 'default'; }}
       onDoubleClick={(e) => { e.stopPropagation(); setZoomedFrame(!zoomedFrame); }}
     >
-      
-      {/* Butterfly Anchors */}
-      <Html position={[-0.8, panelH / 2 + 0.1, 0]} center>
-        <AnimeButterfly delay={4000} />
-      </Html>
-      <Html position={[0.8, -panelH / 2 - 0.1, 0]} center>
-        <AnimeButterfly delay={8000} />
-      </Html>
 
       {/* ─── LEFT PANEL (Main Base) ─── */}
       <group position={[-panelW/2, panelH/2, 0]}>
@@ -249,7 +240,7 @@ export default function WoodenPhotoFrame({ album, position = [0, 0, 0], rotation
             {/* Front Photo */}
             <mesh position={[0, 0, (panelD - 0.1)/2 + 0.001]}>
               <planeGeometry args={[panelW - borderThick*2 - 0.15, panelH - borderThick*2 - 0.15]} />
-              <meshStandardMaterial map={texture} roughness={0.4} />
+              <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.25} roughness={0.4} />
             </mesh>
             
             {/* Back Photo Glow Border */}
@@ -261,7 +252,7 @@ export default function WoodenPhotoFrame({ album, position = [0, 0, 0], rotation
             {/* Back Photo (same image) */}
             <mesh position={[0, 0, -((panelD - 0.1)/2 + 0.001)]} rotation={[0, Math.PI, 0]}>
               <planeGeometry args={[panelW - borderThick*2 - 0.15, panelH - borderThick*2 - 0.15]} />
-              <meshStandardMaterial map={texture} roughness={0.4} />
+              <meshStandardMaterial map={texture} emissiveMap={texture} emissive="#ffffff" emissiveIntensity={0.25} roughness={0.4} />
             </mesh>
           </group>
 

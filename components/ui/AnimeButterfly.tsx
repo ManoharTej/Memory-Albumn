@@ -14,36 +14,45 @@ export default function AnimeButterfly({ delay = 0 }: { delay?: number }) {
     const el = butterflyRef.current;
 
     let isFlying = true;
-    let currentX = 0;
-    let currentY = 0;
+    let currentX = (Math.random() - 0.5) * 200;
+    let currentY = (Math.random() - 0.5) * 200;
+    // Set a fresh random direction each hop
+    let zigDir = 1;
 
     const flyRandomly = () => {
       if (!isFlying) return;
-      
-      // Calculate a destination that zig-zags relative to current position
-      let nextX = currentX + (Math.random() - 0.5) * 600; // erratic darts
-      let nextY = currentY + (Math.random() - 0.5) * 500;
 
-      // Keep inside screen bounds
-      const halfW = window.innerWidth * 0.45;
-      const halfH = window.innerHeight * 0.45;
-      if (nextX > halfW) nextX = halfW;
-      if (nextX < -halfW) nextX = -halfW;
-      if (nextY > halfH) nextY = halfH;
-      if (nextY < -halfH) nextY = -halfH;
-      
-      // If zoomed, force the butterfly to the far left or far right edges to avoid blocking the image!
-      if (useMemoryStore.getState().zoomedFrame || useMemoryStore.getState().zoomedMemoryId) {
-        if (nextX > 0) nextX = window.innerWidth / 2 - 100;
-        else nextX = -window.innerWidth / 2 + 100;
-        nextY = -window.innerHeight / 2 + 150 + Math.random() * 300;
+      const state = useMemoryStore.getState();
+      const zoomed = state.zoomedFrame || state.zoomedMemoryId;
+
+      let nextX: number;
+      let nextY: number;
+
+      if (zoomed) {
+        // Push to screen edges so they don't block the zoomed view
+        nextX = zigDir > 0 ? window.innerWidth / 2 - 80 : -window.innerWidth / 2 + 80;
+        nextY = -window.innerHeight / 2 + 100 + Math.random() * (window.innerHeight - 200);
+        zigDir *= -1;
+      } else {
+        // Wide zig-zag roaming: alternate between far-left & far-right waypoints
+        // + random vertical scatter → creates a natural W/Z-pattern flight
+        const halfW = window.innerWidth * 0.42;
+        const halfH = window.innerHeight * 0.42;
+        // Zig-zag: flip horizontal direction every hop
+        zigDir *= -1;
+        const xBias = zigDir * (halfW * 0.5 + Math.random() * halfW * 0.5);
+        nextX = xBias + (Math.random() - 0.5) * 120;
+        nextY = (Math.random() - 0.5) * halfH * 2;
+        // Clamp
+        nextX = Math.max(-halfW, Math.min(halfW, nextX));
+        nextY = Math.max(-halfH, Math.min(halfH, nextY));
       }
 
-      // Point towards movement
-      const rotateZ = nextX > currentX ? 30 : -30; 
-      // Add a 3D tumble effect as it darts
-      const rotateX = (Math.random() - 0.5) * 60;
-      const tumbleY = (Math.random() - 0.5) * 60;
+      // Tilt in direction of travel
+      const dx = nextX - currentX;
+      const rotateZ = Math.max(-40, Math.min(40, dx * 0.08));
+      const rotateX = (Math.random() - 0.5) * 50;
+      const tumbleY = (Math.random() - 0.5) * 50;
 
       currentX = nextX;
       currentY = nextY;
@@ -52,17 +61,17 @@ export default function AnimeButterfly({ delay = 0 }: { delay?: number }) {
         targets: el,
         translateX: nextX,
         translateY: nextY,
-        rotateZ: rotateZ,
-        rotateX: rotateX,
+        rotateZ,
+        rotateX,
         rotateY: tumbleY,
         scale: 1.0 + Math.random() * 0.4,
-        duration: 400 + Math.random() * 800, // Very fast, sudden movements
+        duration: 500 + Math.random() * 900,
         easing: 'easeInOutQuad',
         complete: flyRandomly
       });
     };
 
-    // Start flying
+    // Start flying after stagger delay
     setTimeout(flyRandomly, delay);
 
     return () => {

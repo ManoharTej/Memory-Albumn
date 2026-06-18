@@ -17,6 +17,7 @@ import {
 import { BlendFunction } from 'postprocessing';
 import * as THREE from 'three';
 import StudyRoom from './StudyRoom';
+import ScreenshotCapture from './ScreenshotCapture';
 import { useMemoryStore } from '@/stores/useMemoryStore';
 import { SCENE, COLORS } from '@/lib/constants';
 
@@ -48,7 +49,7 @@ function PostEffects() {
   if (deviceTier === 'low') return null;
 
   return (
-    <EffectComposer>
+    <EffectComposer disableNormalPass>
       <Bloom 
         luminanceThreshold={0.6} 
         luminanceSmoothing={0.9} 
@@ -78,6 +79,7 @@ export default function Scene() {
           toneMappingExposure: 1.1,
           outputColorSpace: THREE.SRGBColorSpace,
           powerPreference: 'high-performance',
+          preserveDrawingBuffer: true,
         }}
         camera={{
           fov: SCENE.camera.fov,
@@ -90,6 +92,9 @@ export default function Scene() {
         <Suspense fallback={null}>
           {/* The 3D study room */}
           <StudyRoom />
+
+          {/* Screenshot capture helper */}
+          <ScreenshotCapture />
 
           {/* Post-processing */}
           <PostEffects />

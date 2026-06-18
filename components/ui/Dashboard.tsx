@@ -9,7 +9,9 @@ import type { LetterStyle } from '@/types';
 interface DraftMemory {
   id: string;
   file: File;
-  photoUrl: string;
+  photoUrl: string; // Local blob URL for immediate UI
+  cloudUrl?: string; // Firebase storage URL
+  isUploading?: boolean;
   quote: string;
 }
 
@@ -57,28 +59,38 @@ export default function Dashboard() {
 
   // Wooden Frame State
   const [frameText, setFrameText] = useState('Every time you\nLIGHT THIS UP\nI hope you feel that\nTOGETHER IS MY\nFAVORITE\nPLACE TO BE');
-  const [framePhotoUrl, setFramePhotoUrl] = useState<string>('');
+  const [framePhotoUrl, setFramePhotoUrl] = useState<string>(''); // Local blob
+  const [frameCloudUrl, setFrameCloudUrl] = useState<string>(''); // Uploaded URL
+  const [isFrameUploading, setIsFrameUploading] = useState(false);
   const frameFileInputRef = useRef<HTMLInputElement>(null);
 
   // Only render during creation phase!
   if (scene !== 'creation') return null;
 
-  const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      const newDrafts = newFiles.map((file, index) => ({
-        id: `draft-${Date.now()}-${index}`,
-        file,
-        photoUrl: URL.createObjectURL(file),
-        quote: '',
-      }));
-      setDraftMemories([...draftMemories, ...newDrafts].slice(0, 30));
+      
+      const newDrafts: DraftMemory[] = newFiles.map((file, index) => {
+        const id = `draft-${Date.now()}-${index}`;
+
+        return {
+          id,
+          file,
+          photoUrl: URL.createObjectURL(file),
+          quote: '',
+          isUploading: false
+        };
+      });
+      setDraftMemories(prev => [...prev, ...newDrafts].slice(0, 30));
     }
   };
 
-  const handleFrameFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFrameFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFramePhotoUrl(URL.createObjectURL(e.target.files[0]));
+      const file = e.target.files[0];
+      setFramePhotoUrl(URL.createObjectURL(file));
+      setIsFrameUploading(false);
     }
   };
 
@@ -108,7 +120,7 @@ export default function Dashboard() {
   const handleCreate = () => {
     const memories = draftMemories.map((draft, i) => ({
       id: `new-mem-${Date.now()}-${i}`,
-      photoUrl: draft.photoUrl,
+      photoUrl: draft.cloudUrl || draft.photoUrl,
       caption: `Memory ${i + 1}`,
       quote: draft.quote,
       date: new Date().toLocaleDateString(),
@@ -125,7 +137,7 @@ export default function Dashboard() {
         text: letterText
       },
       frameText,
-      framePhotoUrl
+      framePhotoUrl: frameCloudUrl || framePhotoUrl
     };
 
     addAlbum(newAlbum);

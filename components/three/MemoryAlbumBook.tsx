@@ -11,7 +11,6 @@ import * as THREE from 'three';
 import { gsap } from '@/lib/gsapConfig';
 import { useMemoryStore } from '@/stores/useMemoryStore';
 import { Html } from '@react-three/drei';
-import AnimeButterfly from '@/components/ui/AnimeButterfly';
 import BookPage from './BookPage';
 import type { MemoryAlbum } from '@/types';
 
@@ -145,10 +144,6 @@ export default function MemoryAlbumBook({ album, position }: MemoryAlbumBookProp
       onPointerOut={(e) => { e.stopPropagation(); setHovered(false); }}
       onClick={handleClick}
     >
-      {/* Butterfly Anchor */}
-      <Html position={[0, height / 2 + 0.1, 0.5]} center>
-        <AnimeButterfly delay={1000} />
-      </Html>
 
       {/* ── Interactive Flipping Pages ── */}
       {/* We dynamically generate exactly 32 physical pages to make the book look full */

@@ -17,24 +17,24 @@ export default function RoomLighting() {
   useFrame((state) => {
     if (!candleLightRef.current) return;
     const time = state.clock.elapsedTime;
-    const baseIntensity = 1.2;
-    const flicker1 = Math.sin(time * 12) * 0.1;
-    const flicker2 = Math.sin(time * 24) * 0.05;
-    const flicker3 = Math.sin(time * 3) * 0.15;
+    const baseIntensity = 4.0; // Cranked up for maximum warmth and visibility
+    const flicker1 = Math.sin(time * 12) * 0.15;
+    const flicker2 = Math.sin(time * 24) * 0.08;
+    const flicker3 = Math.sin(time * 3) * 0.2;
     candleLightRef.current.intensity = baseIntensity + flicker1 + flicker2 + flicker3;
   });
 
   return (
     <group>
-      {/* Soft ambient moonlight fill */}
-      <ambientLight intensity={0.1} color="#a0b0d0" />
+      {/* Soft ambient moonlight fill - INCREASED to brighten the shadows */}
+      <ambientLight intensity={0.4} color="#a0b0d0" />
 
-      {/* Main warm fill light from the room */}
+      {/* Main warm fill light from the room - INCREASED to brighten the book */}
       <pointLight 
-        position={[0, 5, 2]} 
-        intensity={0.8} 
+        position={[0, 6, 3]} 
+        intensity={2.0} 
         color={COLORS.roomWallWarm} 
-        distance={20}
+        distance={25}
         decay={1.5}
       />
 
@@ -47,14 +47,14 @@ export default function RoomLighting() {
         decay={2}
       />
 
-      {/* The Candle Light (Magical warm glow emitting from the shelf) */}
+      {/* The Candle Light (Magical warm glow emitting from the new candle position) */}
       <pointLight
         ref={candleLightRef}
-        position={[2.2, 1.6, -0.9]}
+        position={[1.8, 2.2, -0.2]} // Moved directly above the new candle position!
         color={COLORS.candleGlow}
-        intensity={1.2}
-        distance={8}
-        decay={2}
+        intensity={4.0}
+        distance={15}
+        decay={1.5}
         castShadow
         shadow-bias={-0.001}
       />

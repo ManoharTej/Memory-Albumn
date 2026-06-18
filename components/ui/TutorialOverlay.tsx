@@ -102,7 +102,7 @@ export default function TutorialOverlay() {
           onMouseOver={(e) => e.currentTarget.style.background = 'rgba(212,175,55,0.2)'}
           onMouseOut={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.6)'}
         >
-          {step === 10 ? 'Start Creating Now &rarr;' : 'Skip Demo & Start Creating &rarr;'}
+          {step === 10 ? 'Start Creating Now →' : 'Skip Demo & Start Creating →'}
         </button>
       </div>
 

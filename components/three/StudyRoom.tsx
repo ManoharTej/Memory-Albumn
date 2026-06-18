@@ -3,7 +3,7 @@
 // ══════════════════════════════════════════════════════════════
 import { useRef, useEffect, useState } from 'react';
 import { useThree, useFrame, createPortal } from '@react-three/fiber';
-import { Environment, MeshReflectorMaterial } from '@react-three/drei';
+import { Environment, MeshReflectorMaterial, Text } from '@react-three/drei';
 import * as THREE from 'three';
 import { gsap } from '@/lib/gsapConfig';
 import { COLORS, SCENE, DEMO_ALBUMS } from '@/lib/constants';
@@ -21,7 +21,7 @@ const woodMid = "#3d2b1f";
 const woodLight = "#5c4033";
 const gold = "#a67c00";
 
-function CandleFlame({ position, scale = 1, lightIntensity = 3.0 }: { position: [number, number, number], scale?: number, lightIntensity?: number }) {
+function CandleFlame({ position, scale = 1, lightIntensity = 6.0 }: { position: [number, number, number], scale?: number, lightIntensity?: number }) {
   const flameRef = useRef<THREE.Group>(null);
   const lightRef = useRef<THREE.PointLight>(null);
 
@@ -52,7 +52,7 @@ function CandleFlame({ position, scale = 1, lightIntensity = 3.0 }: { position: 
         <sphereGeometry args={[0.06, 8, 8]} />
         <meshBasicMaterial color="#ffaa00" transparent opacity={0.6} />
       </mesh>
-      <pointLight ref={lightRef} position={[0, 0, 0]} distance={10} color="#ffaa00" castShadow shadow-bias={-0.001} />
+      <pointLight ref={lightRef} position={[0, 0, 0]} distance={15} color="#ffaa00" castShadow shadow-bias={-0.001} />
     </group>
   );
 }
@@ -80,6 +80,102 @@ function GlassCandle({ position, color }: { position: [number, number, number], 
         <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} roughness={0.4} />
       </mesh>
       <CandleFlame position={[0, 0.2, 0]} scale={0.7} lightIntensity={1.5} />
+    </group>
+  );
+}
+
+function FlowerVase({ position }: { position: [number, number, number] }) {
+  const h = 0.4; // pot height
+  const r = 0.25; // pot radius
+  const numStripes = 5;
+  const step = h / numStripes;
+
+  // Horizontal striped pot
+  const pot = Array.from({ length: numStripes }).map((_, i) => (
+    <mesh key={i} position={[0, i * step + step / 2, 0]} castShadow receiveShadow>
+      <cylinderGeometry args={[r, r - (i === 0 ? 0.02 : 0), step, 32]} />
+      <meshStandardMaterial color={i % 2 === 0 ? "#ffffff" : "#1a1a1a"} roughness={0.6} />
+    </mesh>
+  ));
+
+  // Plant stems, leaves, flowers
+  const plant = Array.from({ length: 6 }).map((_, i) => {
+    const angle = (i / 6) * Math.PI * 2;
+    const tilt = Math.PI / 8 + Math.random() * 0.15;
+    const height = 0.3 + Math.random() * 0.3;
+    return (
+      <group key={'stem'+i} position={[0, h, 0]} rotation={[0, angle, tilt]}>
+        {/* Stem */}
+        <mesh position={[0, height / 2, 0]} castShadow>
+          <cylinderGeometry args={[0.008, 0.015, height, 8]} />
+          <meshStandardMaterial color="#2d5a27" roughness={0.8} />
+        </mesh>
+        
+        {/* Leaves */}
+        <mesh position={[0.05, height * 0.4, 0]} rotation={[0, 0, -Math.PI/4]} castShadow>
+          <sphereGeometry args={[0.06, 8, 8]} scale={[1, 0.2, 0.5]} />
+          <meshStandardMaterial color="#3a7033" roughness={0.6} />
+        </mesh>
+        <mesh position={[-0.05, height * 0.7, 0]} rotation={[0, 0, Math.PI/4]} castShadow>
+          <sphereGeometry args={[0.05, 8, 8]} scale={[1, 0.2, 0.5]} />
+          <meshStandardMaterial color="#3a7033" roughness={0.6} />
+        </mesh>
+
+        {/* Pink Flowers */}
+        <group position={[0, height, 0]} rotation={[Math.random(), Math.random(), 0]}>
+          <mesh position={[0,0,0]} castShadow>
+            <icosahedronGeometry args={[0.08, 0]} />
+            <meshStandardMaterial color="#ff1493" roughness={0.4} />
+          </mesh>
+          <mesh position={[0.04, 0.04, 0]} castShadow>
+            <icosahedronGeometry args={[0.06, 0]} />
+            <meshStandardMaterial color="#ff69b4" roughness={0.4} />
+          </mesh>
+          <mesh position={[-0.04, -0.02, 0.04]} castShadow>
+            <icosahedronGeometry args={[0.07, 0]} />
+            <meshStandardMaterial color="#e75480" roughness={0.4} />
+          </mesh>
+        </group>
+      </group>
+    );
+  });
+
+  // String Lights wrapped around
+  const fairyLights = Array.from({ length: 15 }).map((_, i) => {
+    // Spiral up
+    const t = i / 15;
+    const a = t * Math.PI * 2 * 3; // 3 full turns
+    const currentR = r * 0.8 * (1 - t * 0.3); // taper inwards
+    const y = h + 0.05 + t * 0.5;
+    const x = Math.cos(a) * currentR;
+    const z = Math.sin(a) * currentR;
+    
+    return (
+      <group key={'light'+i} position={[x, y, z]}>
+        <mesh>
+          <sphereGeometry args={[0.015, 8, 8]} />
+          {/* Reduce bloom by using emissive with lower intensity instead of unlit bright color */}
+          <meshStandardMaterial color="#ffeba1" emissive="#ffeba1" emissiveIntensity={0.4} />
+        </mesh>
+        {/* Point lights intensity reduced by ~30-40% */}
+        {i % 3 === 0 && (
+          <pointLight color="#ffeba1" intensity={0.3} distance={1.2} decay={2} />
+        )}
+      </group>
+    );
+  });
+
+  return (
+    <group position={position}>
+      {pot}
+      {/* Dirt */}
+      <mesh position={[0, h - 0.01, 0]} rotation={[-Math.PI/2, 0, 0]}>
+        <circleGeometry args={[r - 0.01, 32]} />
+        <meshStandardMaterial color="#1a0f00" roughness={1} />
+      </mesh>
+      {plant}
+      {/* Fairy Lights */}
+      {fairyLights}
     </group>
   );
 }
@@ -152,13 +248,68 @@ function Desk() {
             <meshStandardMaterial color="#f8f8f8" roughness={0.9} />
           </mesh>
         ))}
+
+        {/* Fountain Pen (Laid Flat on top of the papers) */}
+        <group position={[0.1, 0.07, 0.1]} rotation={[Math.PI / 2, 0, Math.PI / 4]}>
+          {/* Main Body */}
+          <mesh position={[0, -0.1, 0]} castShadow>
+            <cylinderGeometry args={[0.02, 0.015, 0.4, 16]} />
+            <meshStandardMaterial color="#1a1a1a" roughness={0.2} metalness={0.5} />
+          </mesh>
+          {/* Gold Band */}
+          <mesh position={[0, 0.1, 0]} castShadow>
+            <cylinderGeometry args={[0.021, 0.021, 0.05, 16]} />
+            <meshStandardMaterial color="#d4af37" roughness={0.2} metalness={0.9} />
+          </mesh>
+          {/* Nib Base */}
+          <mesh position={[0, 0.15, 0]} castShadow>
+            <cylinderGeometry args={[0.015, 0.005, 0.1, 16]} />
+            <meshStandardMaterial color="#d4af37" roughness={0.2} metalness={0.9} />
+          </mesh>
+          {/* Nib Tip */}
+          <mesh position={[0, 0.22, 0]} castShadow>
+            <coneGeometry args={[0.01, 0.05, 16]} />
+            <meshStandardMaterial color="#d4af37" roughness={0.1} metalness={1.0} />
+          </mesh>
+        </group>
       </group>
       
-      {/* Tall Candle (Moved onto the papers) */}
-      <group position={[-2.8, 1.55, 0.5]}>
+      {/* Vintage Writing Set (Ink & Fountain Pen) */}
+      <group position={[-3.6, 1.5, 0.3]}>
+        {/* Ink Bottle */}
+        <group position={[0.2, 0, -0.1]}>
+          {/* Base */}
+          <mesh position={[0, 0.1, 0]} castShadow receiveShadow>
+            <cylinderGeometry args={[0.15, 0.18, 0.2, 16]} />
+            <meshPhysicalMaterial color="#050505" transmission={0.5} opacity={1} roughness={0.1} ior={1.5} thickness={0.5} transparent />
+          </mesh>
+          {/* Label */}
+          <mesh position={[0, 0.1, 0.155]}>
+            <planeGeometry args={[0.18, 0.08]} />
+            <meshStandardMaterial color="#d4c4a8" />
+          </mesh>
+          {/* Label Text */}
+          <Text position={[0, 0.1, 0.16]} fontSize={0.04} color="#2b1a10" fontWeight="bold">
+            INK
+          </Text>
+          {/* Neck */}
+          <mesh position={[0, 0.25, 0]} castShadow>
+            <cylinderGeometry args={[0.06, 0.08, 0.1, 16]} />
+            <meshStandardMaterial color="#8b6508" metalness={0.8} roughness={0.2} /> {/* Brass neck */}
+          </mesh>
+          {/* Cap/Stopper */}
+          <mesh position={[0, 0.35, 0]} castShadow>
+            <sphereGeometry args={[0.08, 16, 16]} />
+            <meshStandardMaterial color="#8b6508" metalness={0.8} roughness={0.2} />
+          </mesh>
+        </group>
+      </group>
+      
+      {/* Tall Candle (Moved between book and frame) */}
+      <group position={[1.8, 1.55, -0.2]}>
         {/* Holder */}
         <mesh position={[0, 0.05, 0]} castShadow>
-          <cylinderGeometry args={[0.3, 0.4, 0.1, 16]} />
+          <cylinderGeometry args={[0.15, 0.2, 0.1, 16]} />
           <meshStandardMaterial color={gold} metalness={0.9} roughness={0.2} />
         </mesh>
         {/* Wax (Taller) */}
@@ -173,6 +324,12 @@ function Desk() {
       <GlassCandle position={[-3.8, 1.5, -1.2]} color="#ff4444" /> {/* Red wax */}
       <GlassCandle position={[3.8, 1.5, -1.2]} color="#44ff44" /> {/* Green wax */}
       <GlassCandle position={[4.2, 1.5, 1.0]} color="#00bfff" /> {/* Sky Blue wax */}
+      
+      {/* Flower Vase with Fairy Lights (Pushed back to avoid book cover) */}
+      <FlowerVase position={[-1.8
+      
+        , 1.5, -1.2
+        ]} />
       
     </group>
   );

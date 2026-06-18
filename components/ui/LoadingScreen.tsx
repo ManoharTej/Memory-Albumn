@@ -42,6 +42,7 @@ const PolaroidLetter = ({ char }: { char: string }) => (
 export default function LoadingScreen() {
   const scene = useMemoryStore((s) => s.scene);
   const setScene = useMemoryStore((s) => s.setScene);
+  const isReceiverMode = useMemoryStore((s) => s.isReceiverMode);
   const [visible, setVisible] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
   const [ready, setReady] = useState(false);
@@ -144,9 +145,19 @@ export default function LoadingScreen() {
     setFadeOut(true);
     setTimeout(() => {
       setVisible(false);
-      setScene('tutorial');
+      if (isReceiverMode) {
+        setScene('study');
+        // Now trigger the camera zoom so the user SEES the smooth transition
+        const params = new URLSearchParams(window.location.search);
+        const albumId = params.get('album_id');
+        if (albumId) {
+          useMemoryStore.getState().selectAlbum(albumId);
+        }
+      } else {
+        setScene('tutorial');
+      }
     }, 1500);
-  }, [setScene]);
+  }, [setScene, isReceiverMode]);
 
   if (!visible) return null;
 
@@ -247,7 +258,7 @@ export default function LoadingScreen() {
             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
             onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
           >
-            Create An Album
+            {isReceiverMode ? 'Enter The Album' : 'Create An Album'}
           </button>
         )}
       </div>
