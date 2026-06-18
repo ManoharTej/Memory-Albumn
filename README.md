@@ -47,20 +47,24 @@ Memory Album transforms the traditional concept of a digital photo gallery into 
 
 <table>
   <tr>
-    <td align="center"><b>Dashboard / Desk View</b></td>
-    <td align="center"><b>Book Interactions</b></td>
+    <td align="center"><b>1. Welcome Area</b></td>
+    <td align="center"><b>2. Craft Your Story</b></td>
+    <td align="center"><b>3. Arrange Memories</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/dashboard.png" alt="Desk View" width="400"/></td>
-    <td><img src="screenshots/features.png" alt="Book View" width="400"/></td>
+    <td><img src="screenshots/1.png" alt="Welcome Area" width="300"/></td>
+    <td><img src="screenshots/2.png" alt="Craft Your Story" width="300"/></td>
+    <td><img src="screenshots/3.png" alt="Arrange Memories" width="300"/></td>
   </tr>
   <tr>
-    <td align="center"><b>Special Memories</b></td>
-    <td align="center"><b>Glowing Environment</b></td>
+    <td align="center"><b>4. Desk Overview</b></td>
+    <td align="center"><b>5. The Memory Book</b></td>
+    <td align="center"><b>6. Interactive Photo Frame</b></td>
   </tr>
   <tr>
-    <td><img src="screenshots/results.png" alt="Photo Frame" width="400"/></td>
-    <td><img src="screenshots/home.png" alt="Glowing Atmosphere" width="400"/></td>
+    <td><img src="screenshots/4.png" alt="Desk Overview" width="300"/></td>
+    <td><img src="screenshots/5.png" alt="The Memory Book" width="300"/></td>
+    <td><img src="screenshots/6.png" alt="Interactive Photo Frame" width="300"/></td>
   </tr>
 </table>
 
