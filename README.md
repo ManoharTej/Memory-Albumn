@@ -1,9 +1,22 @@
 <div align="center">
   <img src="screenshots/home.png" alt="Memory Album Banner" width="100%" />
+  <br/><br/>
   
-  # 📖 Memory Album 
-  
+  # 🦋 Memory Album 
   **An immersive, interactive 3D WebGL memory book experience.**
+  
+  [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ManoharTej/Memory-Albumn)
+  
+  <br/>
+  
+  ![Next JS](https://img.shields.io/badge/Next-black?style=for-the-badge&logo=next.js&logoColor=white)
+  ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB)
+  ![Three.js](https://img.shields.io/badge/Three.js-black?style=for-the-badge&logo=three.js&logoColor=white)
+  ![Tailwind CSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+  ![Vercel](https://img.shields.io/badge/vercel-%23000000.svg?style=for-the-badge&logo=vercel&logoColor=white)
+  ![GSAP](https://img.shields.io/badge/GSAP-88CE02?style=for-the-badge&logo=greensock&logoColor=white)
+
+  <br/>
 </div>
 
 ---
@@ -11,9 +24,9 @@
 ## 🌟 Overview
 Memory Album transforms the traditional concept of a digital photo gallery into a cozy, interactive 3D study room. Built with **Next.js**, **React Three Fiber**, and **GSAP**, it offers a stunningly atmospheric environment where users can physically interact with a digital photo album, flip pages, and experience their memories surrounded by dynamic lighting, animated butterflies, and glowing fireflies.
 
-## 🚀 Features
+## 🚀 Key Features
 - **Interactive 3D Study Room**: Explore a fully modeled, cozy 3D desk environment with dynamic lighting.
-- **Physical Memory Book Mechanics**: Flip through album pages with fluid, physics-based 3D animations using GSAP and Anime.js.
+- **Physical Memory Book Mechanics**: Flip through album pages with fluid, physics-based 3D animations using **GSAP** and **Anime.js**.
 - **Atmospheric Post-Processing**: Enjoy a premium visual experience with real-time WebGL Bloom, Vignette, and ambient noise overlays.
 - **Interactive Props**: Click on the wooden photo frame to open its doors and zoom into specific memories. 
 - **Organic Animations**: Watch physics-driven 3D butterflies and fireflies flutter naturally around the environment.
@@ -21,7 +34,16 @@ Memory Album transforms the traditional concept of a digital photo gallery into 
 
 ---
 
-## 📸 Gallery & Walkthrough
+## 🎥 Video Walkthrough Demo
+*A complete walkthrough of the Memory Album experience from the browser.*
+
+<div align="center">
+  <img src="assets/demo.webp" alt="Video Walkthrough Demo" width="80%" />
+</div>
+
+---
+
+## 📸 Gallery
 
 <table>
   <tr>
@@ -34,34 +56,55 @@ Memory Album transforms the traditional concept of a digital photo gallery into 
   </tr>
   <tr>
     <td align="center"><b>Special Memories</b></td>
-    <td align="center"><b>Demo Walkthrough</b></td>
+    <td align="center"><b>Glowing Environment</b></td>
   </tr>
   <tr>
     <td><img src="screenshots/results.png" alt="Photo Frame" width="400"/></td>
-    <td><img src="assets/demo.webp" alt="Video Walkthrough" width="400"/></td>
+    <td><img src="screenshots/home.png" alt="Glowing Atmosphere" width="400"/></td>
   </tr>
 </table>
 
 ---
 
 ## 🏗️ Technical Architecture
-This application cleanly separates the 3D WebGL logic from the 2D UI overlays using Zustand for seamless cross-layer communication.
 
-For a detailed architecture diagram, see [Architecture Documentation](docs/architecture.md).
+This application cleanly separates the 3D WebGL logic from the 2D UI overlays using **Zustand** for seamless cross-layer communication.
 
-For an in-depth code and technical breakdown, see the [Project Analysis](docs/PROJECT_ANALYSIS.md).
+```mermaid
+graph TD
+    User([User / Browser]) --> UI[2D UI Overlays]
+    User --> Canvas[3D Canvas Interactions]
 
-### 🛠️ Tech Stack
-- **Framework**: Next.js (App Router), React 18/19
-- **3D Engine**: Three.js, React Three Fiber (`@react-three/fiber`), React Three Drei
-- **Post-Processing**: React Three Postprocessing (`@react-three/postprocessing`)
-- **Animation**: GSAP (GreenSock), Anime.js
-- **State Management**: Zustand
-- **Styling**: Tailwind CSS
+    subgraph "Frontend Architecture"
+        UI --> |Next.js / Tailwind| DOM[DOM Elements]
+        Canvas --> |React Three Fiber| WebGL[WebGL Scene]
+
+        DOM --> Store[(Zustand Global State)]
+        WebGL --> Store
+        Store --> DOM
+        Store --> WebGL
+    end
+
+    subgraph "3D Scene Components"
+        WebGL --> Environment[RoomLighting, Desk, Candles]
+        WebGL --> Book[Memory Album Book]
+        WebGL --> Frame[Wooden Photo Frame]
+        WebGL --> Effects[Post Processing / Bloom]
+        WebGL --> Swarm[Butterfly/Firefly Swarm]
+    end
+
+    subgraph "Logic & Animations"
+        Book --> GSAP[GSAP / Anime.js]
+        Frame --> GSAP
+        Swarm --> Math[Custom Physics & Paths]
+    end
+```
+
+For an in-depth code and technical breakdown, see the [Project Analysis Documentation](docs/PROJECT_ANALYSIS.md).
 
 ---
 
-## 💻 Installation & Setup
+## 💻 Local Setup & Deployment
 
 1. **Clone the repository:**
    ```bash
@@ -79,15 +122,14 @@ For an in-depth code and technical breakdown, see the [Project Analysis](docs/PR
    npm run dev
    ```
 
-4. **Experience the app:**
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+4. **Deploying on Vercel:**
+   The fastest way to deploy this project is via the [Vercel CLI](https://vercel.com/cli) or connecting your GitHub repo on the Vercel Dashboard.
+   ```bash
+   npx vercel --prod
+   ```
 
 ---
+## ⚖️ License
+Copyright (c) 2026 Manohar Tej. All Rights Reserved. 
 
-## 📈 Future Improvements
-- **Backend Integration**: Add a CMS or Firebase integration to allow dynamic user-uploaded memories.
-- **Multiplayer**: Implement WebSockets to allow multiple users to explore the study room together.
-- **Spatial Audio**: Add 3D positional audio for page turns and crackling candles to enhance immersion.
-
----
-*Maintained by [Manohar Tej](https://github.com/ManoharTej)*
+*Proprietary and Confidential. Unauthorized copying, modification, or distribution is strictly prohibited.*
