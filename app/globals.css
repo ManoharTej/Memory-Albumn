@@ -109,11 +109,14 @@ html {
 
 html, body {
   width: 100%;
-  height: 100%;
+  height: 100dvh;
   overflow: hidden;
   background-color: var(--color-midnight);
   color: var(--color-text);
   font-family: var(--font-body);
+  touch-action: none; /* Prevent all native touch scrolling/zooming */
+  -webkit-overflow-scrolling: none;
+  overscroll-behavior: none; /* Prevent pull-to-refresh bounce */
 }
 
 body {
