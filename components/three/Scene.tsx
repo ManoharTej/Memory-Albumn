@@ -49,7 +49,7 @@ function PostEffects() {
   if (deviceTier === 'low') return null;
 
   return (
-    <EffectComposer disableNormalPass>
+    <EffectComposer>
       <Bloom 
         luminanceThreshold={0.6} 
         luminanceSmoothing={0.9} 

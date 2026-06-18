@@ -146,7 +146,7 @@ export default function LoadingScreen() {
     setTimeout(() => {
       setVisible(false);
       if (isReceiverMode) {
-        setScene('study');
+        setScene('entering');
         // Now trigger the camera zoom so the user SEES the smooth transition
         const params = new URLSearchParams(window.location.search);
         const albumId = params.get('album_id');
