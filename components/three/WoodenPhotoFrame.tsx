@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
-import { useFrame, useLoader } from '@react-three/fiber';
+import { useFrame, useLoader, useThree } from '@react-three/fiber';
 import { Text, Html } from '@react-three/drei';
 import type { MemoryAlbum } from '@/types';
 import { gsap } from '@/lib/gsapConfig';
