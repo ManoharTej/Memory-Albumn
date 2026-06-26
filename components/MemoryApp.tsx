@@ -32,6 +32,7 @@ export default function MemoryApp() {
   const setIsExpired = useMemoryStore((s) => s.setIsExpired);
   const fetchSharedAlbum = useMemoryStore((s) => s.fetchSharedAlbum);
   const selectAlbum = useMemoryStore((s) => s.selectAlbum);
+  const isPortrait = useMemoryStore((s) => s.isPortrait);
 
   // Force evaluation of the store in the main client bundle
   // This prevents Next.js from splitting the store into a separate chunk for the dynamic Scene
@@ -58,6 +59,10 @@ export default function MemoryApp() {
   }, [fetchSharedAlbum, selectAlbum, setIsExpired, setIsReceiverMode]);
 
   const hideScene = scene === 'creation';
+
+  if (isPortrait) {
+    return <LandscapePrompt />;
+  }
 
   return (
     <>

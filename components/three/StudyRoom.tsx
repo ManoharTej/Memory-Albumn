@@ -58,28 +58,34 @@ function CandleFlame({ position, scale = 1, lightIntensity = 6.0 }: { position: 
 }
 
 function GlassCandle({ position, color }: { position: [number, number, number], color: string }) {
+  const isMobile = useMemoryStore(s => s.isMobile);
+
   return (
     <group position={position}>
       {/* Glass Jar */}
       <mesh position={[0, 0.1, 0]} castShadow>
         <cylinderGeometry args={[0.15, 0.15, 0.2, 16]} />
-        <meshPhysicalMaterial 
-          transmission={0.9} 
-          opacity={1} 
-          metalness={0.1} 
-          roughness={0.1} 
-          ior={1.5} 
-          thickness={0.05} 
-          color="#ffffff" 
-          transparent
-        />
+        {isMobile ? (
+          <meshStandardMaterial color="#ffffff" transparent opacity={0.3} roughness={0.1} />
+        ) : (
+          <meshPhysicalMaterial 
+            transmission={0.9} 
+            opacity={1} 
+            metalness={0.1} 
+            roughness={0.1} 
+            ior={1.5} 
+            thickness={0.05} 
+            color="#ffffff" 
+            transparent
+          />
+        )}
       </mesh>
       {/* Colored Wax */}
       <mesh position={[0, 0.08, 0]} castShadow>
         <cylinderGeometry args={[0.13, 0.13, 0.16, 16]} />
         <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.3} roughness={0.4} />
       </mesh>
-      <CandleFlame position={[0, 0.2, 0]} scale={0.7} lightIntensity={1.5} />
+      <CandleFlame position={[0, 0.2, 0]} scale={0.7} lightIntensity={isMobile ? 0.8 : 1.5} />
     </group>
   );
 }
@@ -181,6 +187,9 @@ function FlowerVase({ position }: { position: [number, number, number] }) {
 }
 
 function Desk() {
+  const isMobile = useMemoryStore(s => s.isMobile);
+  const quality = useMemoryStore(s => s.getQualitySettings)();
+
   return (
     <group position={[0, SCENE.study.deskY, SCENE.study.deskZ]}>
       {/* Heavy Desktop */}
@@ -321,8 +330,12 @@ function Desk() {
       </group>
 
       {/* Glass Candles on Corners */}
-      <GlassCandle position={[-3.8, 1.5, -1.2]} color="#ff4444" /> {/* Red wax */}
-      <GlassCandle position={[3.8, 1.5, -1.2]} color="#44ff44" /> {/* Green wax */}
+      {quality.candleCount > 2 && (
+        <GlassCandle position={[-3.8, 1.5, -1.2]} color="#ff4444" /> /* Red wax */
+      )}
+      {quality.candleCount > 3 && (
+        <GlassCandle position={[3.8, 1.5, -1.2]} color="#44ff44" /> /* Green wax */
+      )}
       <GlassCandle position={[4.2, 1.5, 1.0]} color="#00bfff" /> {/* Sky Blue wax */}
       
       {/* Flower Vase with Fairy Lights (Pushed back to avoid book cover) */}

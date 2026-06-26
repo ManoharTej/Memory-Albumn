@@ -60,11 +60,21 @@ interface MemoryState {
   totalPages: number;
   setTotalPages: (total: number) => void;
 
-  // Device
+  // Device & Quality Manager
   deviceTier: DeviceTier;
   setDeviceTier: (tier: DeviceTier) => void;
   isMobile: boolean;
   setIsMobile: (mobile: boolean) => void;
+  isPortrait: boolean;
+  setIsPortrait: (portrait: boolean) => void;
+  getQualitySettings: () => {
+    dpr: number | [number, number];
+    shadowsEnabled: boolean;
+    candleCount: number;
+    butterflyCount: number;
+    firefliesEnabled: boolean;
+    loadingBooksCount: number;
+  };
 
   // Tutorial / Interaction States
   letterPhase: 'closed' | 'open' | 'reading';
@@ -79,7 +89,7 @@ interface MemoryState {
   clearScreenshotRequest: () => void;
 }
 
-export const useMemoryStore = create<MemoryState>((set) => ({
+export const useMemoryStore = create<MemoryState>((set, get) => ({
   // Navigation
   scene: 'loading',
   setScene: (scene) => set({ scene }),
@@ -177,11 +187,24 @@ export const useMemoryStore = create<MemoryState>((set) => ({
   totalPages: 0,
   setTotalPages: (total) => set({ totalPages: total }),
 
-  // Device
+  // Device & Quality Manager
   deviceTier: 'high',
   setDeviceTier: (tier) => set({ deviceTier: tier }),
   isMobile: false,
   setIsMobile: (mobile) => set({ isMobile: mobile }),
+  isPortrait: false,
+  setIsPortrait: (portrait) => set({ isPortrait: portrait }),
+  getQualitySettings: () => {
+    const isMobile = get().isMobile;
+    return {
+      dpr: isMobile ? 1 : [1, 2],
+      shadowsEnabled: !isMobile,
+      candleCount: isMobile ? 2 : 4,
+      butterflyCount: isMobile ? 1 : 3,
+      firefliesEnabled: !isMobile,
+      loadingBooksCount: isMobile ? 24 : 60,
+    };
+  },
 
   letterPhase: 'closed',
   setLetterPhase: (phase) => set({ letterPhase: phase }),

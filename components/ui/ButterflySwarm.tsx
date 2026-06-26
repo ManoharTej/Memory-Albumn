@@ -125,11 +125,15 @@ function startFlight(el: HTMLElement, index: number) {
 
 // ── Component ─────────────────────────────────────────────────
 export default function ButterflySwarm() {
+  const isMobile = useMemoryStore(s => s.isMobile);
+  const quality = useMemoryStore(s => s.getQualitySettings)();
+  const maxCount = Math.min(3, quality.butterflyCount);
+
   const refs = [
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
-  ];
+  ].slice(0, maxCount);
 
   useEffect(() => {
     const cleanups = refs.map((ref, i) => {

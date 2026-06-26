@@ -67,12 +67,14 @@ function PostEffects() {
 
 export default function Scene() {
   useDeviceDetection();
+  const isMobile = useMemoryStore(s => s.isMobile);
+  const quality = useMemoryStore.getState().getQualitySettings();
 
   return (
     <div className="canvas-container" id="memory-world-canvas">
       <Canvas
-        shadows
-        dpr={[1, 2]}
+        shadows={quality.shadowsEnabled}
+        dpr={quality.dpr}
         gl={{
           antialias: true,
           toneMapping: THREE.ACESFilmicToneMapping,

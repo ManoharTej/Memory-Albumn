@@ -43,6 +43,8 @@ export default function LoadingScreen() {
   const scene = useMemoryStore((s) => s.scene);
   const setScene = useMemoryStore((s) => s.setScene);
   const isReceiverMode = useMemoryStore((s) => s.isReceiverMode);
+  const isMobile = useMemoryStore((s) => s.isMobile);
+  const quality = useMemoryStore((s) => s.getQualitySettings)();
   const [visible, setVisible] = useState(true);
   const [fadeOut, setFadeOut] = useState(false);
   const [ready, setReady] = useState(false);
@@ -186,9 +188,9 @@ export default function LoadingScreen() {
         .flying-book:nth-child(3n) .right-wing { animation-duration: 1.0s; }
       `}} />
 
-      {/* 60 Flying Flapping Books (Concentric Rings) */}
+      {/* Flying Flapping Books (Concentric Rings) */}
       <div style={{ position: 'absolute', left: '50%', top: '50%', pointerEvents: 'none' }}>
-        {Array.from({ length: 60 }).map((_, i) => (
+        {Array.from({ length: quality.loadingBooksCount }).map((_, i) => (
           <div key={i} className="flying-book" style={{ position: 'absolute', opacity: 0, color: 'rgba(232,213,181,0.5)', marginTop: '-18px', marginLeft: '-18px' }}>
             <FlappingBookIcon />
           </div>

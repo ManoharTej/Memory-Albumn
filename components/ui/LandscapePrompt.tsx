@@ -1,9 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useMemoryStore } from '@/stores/useMemoryStore';
 
 export default function LandscapePrompt() {
-  const [isPortrait, setIsPortrait] = useState(false);
+  const isPortrait = useMemoryStore(s => s.isPortrait);
+  const setIsPortrait = useMemoryStore(s => s.setIsPortrait);
 
   useEffect(() => {
     const checkOrientation = () => {

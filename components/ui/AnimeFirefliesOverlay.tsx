@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import anime from 'animejs';
+import { useMemoryStore } from '@/stores/useMemoryStore';
 
 export default function AnimeFirefliesOverlay() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,6 +57,10 @@ export default function AnimeFirefliesOverlay() {
       anime.remove(fireflies);
     };
   }, []);
+
+  const isMobile = useMemoryStore(s => s.isMobile);
+  const quality = useMemoryStore(s => s.getQualitySettings)();
+  if (!quality.firefliesEnabled) return null;
 
   return (
     <div

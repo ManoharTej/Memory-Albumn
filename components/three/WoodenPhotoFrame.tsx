@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame, useLoader } from '@react-three/fiber';
 import { Text, Html } from '@react-three/drei';
@@ -29,8 +29,24 @@ export default function WoodenPhotoFrame({ album, position = [0, 0, 0], rotation
   // Realistic Wood Texture (Rings and Grain)
   const woodTextureUrl = 'https://images.unsplash.com/photo-1546484396-fb3fc6f95f98?q=80&w=1024&auto=format&fit=crop';
   const woodTex = useLoader(THREE.TextureLoader, woodTextureUrl);
-  woodTex.wrapS = woodTex.wrapT = THREE.RepeatWrapping;
-  woodTex.repeat.set(1.5, 1.5);
+  
+  const { gl } = useThree();
+  
+  useEffect(() => {
+    if (texture) {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = gl.capabilities.getMaxAnisotropy();
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.needsUpdate = true;
+    }
+    if (woodTex) {
+      woodTex.colorSpace = THREE.SRGBColorSpace;
+      woodTex.anisotropy = gl.capabilities.getMaxAnisotropy();
+      woodTex.wrapS = woodTex.wrapT = THREE.RepeatWrapping;
+      woodTex.repeat.set(1.5, 1.5);
+      woodTex.needsUpdate = true;
+    }
+  }, [texture, woodTex, gl]);
 
   // Dimensions (Made super thick for realistic 3D block look)
   const panelW = 1.6;

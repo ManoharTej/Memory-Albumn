@@ -24,6 +24,16 @@ interface BookPageProps {
 
 function PolaroidContent({ memory, isZoomed }: { memory: MemoryItem, isZoomed?: boolean }) {
   const texture = useLoader(THREE.TextureLoader, memory.photoUrl);
+  const { gl } = useThree();
+
+  useEffect(() => {
+    if (texture) {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.anisotropy = gl.capabilities.getMaxAnisotropy();
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.needsUpdate = true;
+    }
+  }, [texture, gl]);
   const frameMatRef = useRef<THREE.MeshStandardMaterial>(null);
   const photoMatRef = useRef<THREE.MeshStandardMaterial>(null);
 
@@ -219,7 +229,6 @@ function Polaroid3D({ memory, position, rotation }: { memory: MemoryItem, positi
             </mesh>
           }>
             <PolaroidContent memory={memory} isZoomed={isZoomed} />
-            <HeartsParticles isZoomed={isZoomed} />
           </Suspense>
         </group>
       </group>
