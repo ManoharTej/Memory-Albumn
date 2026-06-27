@@ -6,6 +6,7 @@ import { useMemoryStore } from '@/stores/useMemoryStore';
 export default function LandscapePrompt() {
   const isPortrait = useMemoryStore(s => s.isPortrait);
   const setIsPortrait = useMemoryStore(s => s.setIsPortrait);
+  const scene = useMemoryStore(s => s.scene);
 
   useEffect(() => {
     const checkOrientation = () => {
@@ -27,6 +28,9 @@ export default function LandscapePrompt() {
       window.removeEventListener('orientationchange', checkOrientation);
     };
   }, []);
+
+  // Allow Portrait mode during the Album Creation (Dashboard) phase!
+  if (scene === 'creation') return null;
 
   if (!isPortrait) return null;
 

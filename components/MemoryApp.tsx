@@ -60,10 +60,6 @@ export default function MemoryApp() {
 
   const hideScene = scene === 'creation';
 
-  if (isPortrait) {
-    return <LandscapePrompt />;
-  }
-
   return (
     <>
       <LandscapePrompt />
