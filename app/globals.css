@@ -403,6 +403,33 @@ body {
     gap: 8px !important;
   }
 
+  /* Dashboard Step 2 Items */
+  .memory-item-card {
+    padding: 8px !important;
+    gap: 8px !important;
+  }
+  .memory-img {
+    width: 60px !important;
+    height: 60px !important;
+  }
+  .memory-textarea {
+    height: 40px !important;
+    font-size: 0.8rem !important;
+    padding: 5px !important;
+  }
+  .surprise-btn {
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+  }
+  .nav-buttons-container {
+    padding-bottom: 5px !important;
+    margin-top: 5px !important;
+  }
+  .back-btn {
+    padding: 8px 15px !important;
+    font-size: 0.85rem !important;
+  }
+
   .mobile-landscape-scale {
     transform: scale(0.65);
     transform-origin: center center;

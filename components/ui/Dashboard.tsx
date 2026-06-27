@@ -243,14 +243,15 @@ export default function Dashboard() {
             <p style={{ color: '#dcc6d2', opacity: 0.9, textAlign: 'center', flexShrink: 0, margin: 0 }}>Add sweet notes to each photo. Drag up/down to rearrange.</p>
             <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '15px', paddingRight: '10px', minHeight: 0 }}>
               {draftMemories.map((draft, i) => (
-                <div key={draft.id} style={{ display: 'flex', gap: '15px', background: 'rgba(0,0,0,0.4)', padding: '15px', borderRadius: '12px', alignItems: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div key={draft.id} className="memory-item-card" style={{ display: 'flex', gap: '15px', background: 'rgba(0,0,0,0.4)', padding: '15px', borderRadius: '12px', alignItems: 'center', border: '1px solid rgba(255,255,255,0.05)' }}>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
                     <button onClick={() => moveMemory(i, -1)} disabled={i === 0} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', cursor: i === 0 ? 'not-allowed' : 'pointer', opacity: i === 0 ? 0.3 : 1, padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>▲</button>
                     <button onClick={() => moveMemory(i, 1)} disabled={i === draftMemories.length - 1} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', cursor: i === draftMemories.length - 1 ? 'not-allowed' : 'pointer', opacity: i === draftMemories.length - 1 ? 0.3 : 1, padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>▼</button>
                   </div>
-                  <img src={draft.photoUrl} alt="preview" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px', border: '2px solid rgba(212,175,55,0.3)' }} />
+                  <img src={draft.photoUrl} alt="preview" className="memory-img" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px', border: '2px solid rgba(212,175,55,0.3)' }} />
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                     <textarea 
+                      className="memory-textarea"
                       value={draft.quote}
                       onChange={(e) => {
                         const newDrafts = [...draftMemories];
@@ -260,16 +261,16 @@ export default function Dashboard() {
                       placeholder="Write a sweet note..."
                       style={{ width: '100%', height: '60px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: '#fff', padding: '10px', borderRadius: '8px', resize: 'none', fontSize: '0.95rem', outline: 'none' }}
                     />
-                    <button onClick={() => setRandomQuote(i)} style={{ alignSelf: 'flex-start', background: 'rgba(212,175,55,0.2)', border: '1px solid rgba(212,175,55,0.4)', color: '#e8d5b5', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem', cursor: 'pointer' }}>
+                    <button className="surprise-btn" onClick={() => setRandomQuote(i)} style={{ alignSelf: 'flex-start', background: 'rgba(212,175,55,0.2)', border: '1px solid rgba(212,175,55,0.4)', color: '#e8d5b5', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem', cursor: 'pointer' }}>
                       ✨ Surprise Me
                     </button>
                   </div>
                 </div>
               ))}
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexShrink: 0, paddingBottom: '10px' }}>
-              <button onClick={() => setStep(1)} style={{ padding: '15px 30px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '30px', color: '#fff', cursor: 'pointer' }}>&larr; Back</button>
-              <button onClick={() => setStep(3)} style={{ padding: '15px 40px', background: 'linear-gradient(45deg, #d4af37, #f3e5ab)', border: 'none', borderRadius: '30px', color: '#1a1025', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 15px rgba(212,175,55,0.3)' }}>
+            <div className="nav-buttons-container" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexShrink: 0, paddingBottom: '10px' }}>
+              <button className="back-btn" onClick={() => setStep(1)} style={{ padding: '15px 30px', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '30px', color: '#fff', cursor: 'pointer' }}>&larr; Back</button>
+              <button className="next-btn" onClick={() => setStep(3)} style={{ padding: '15px 40px', background: 'linear-gradient(45deg, #d4af37, #f3e5ab)', border: 'none', borderRadius: '30px', color: '#1a1025', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 15px rgba(212,175,55,0.3)' }}>
                 Next: The Keepsake &rarr;
               </button>
             </div>
