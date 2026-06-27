@@ -435,3 +435,74 @@ body {
     transform-origin: center center;
   }
 }
+
+/* ── Mobile Portrait Native Fitting ───────────────────────── */
+@media (max-width: 768px) and (orientation: portrait) {
+  /* Dashboard */
+  .dashboard-wrapper {
+    padding: 15px 20px !important;
+  }
+  .dashboard-title {
+    font-size: 1.6rem !important;
+    margin-bottom: 5px !important;
+  }
+  .dashboard-subtitle {
+    font-size: 0.9rem !important;
+  }
+  .step-dots {
+    gap: 8px !important;
+    margin-bottom: 20px !important;
+  }
+  .step-dots .dot {
+    width: 8px !important;
+    height: 8px !important;
+  }
+  .dashboard-label {
+    font-size: 0.9rem !important;
+  }
+  .upload-box {
+    padding: 25px 15px !important;
+    font-size: 0.9rem !important;
+  }
+  .next-btn {
+    padding: 12px 25px !important;
+    font-size: 1rem !important;
+  }
+  .step-container {
+    gap: 15px !important;
+  }
+  
+  /* Step 2 additions */
+  .memory-item-card {
+    padding: 10px !important;
+    gap: 10px !important;
+  }
+  .memory-img {
+    width: 80px !important;
+    height: 80px !important;
+  }
+  
+  /* Loading Screen Portrait Scaling */
+  .film-reel-container {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .film-reel-text {
+    font-size: 2.2rem !important;
+    letter-spacing: 8px !important;
+    margin-left: 8px !important;
+  }
+  .polaroid-letter {
+    padding: 8px 8px 25px 8px !important;
+    margin: 0 -5px !important;
+  }
+  .polaroid-inner {
+    width: 45px !important;
+    height: 45px !important;
+    font-size: 1.8rem !important;
+  }
+  .loading-subtitle {
+    font-size: 0.95rem !important;
+    margin-top: 10px !important;
+  }
+}

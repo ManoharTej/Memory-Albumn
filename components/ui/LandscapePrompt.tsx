@@ -29,8 +29,8 @@ export default function LandscapePrompt() {
     };
   }, []);
 
-  // Allow Portrait mode during the Album Creation (Dashboard) phase!
-  if (scene === 'creation') return null;
+  // Allow Portrait mode during the Album Creation (Dashboard) and Loading phases!
+  if (scene === 'creation' || scene === 'loading') return null;
 
   if (!isPortrait) return null;
 

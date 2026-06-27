@@ -150,9 +150,9 @@ export default function Dashboard() {
   };
 
   const renderStepIndicators = () => (
-    <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginBottom: '40px' }}>
+    <div className="step-dots" style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginBottom: '40px' }}>
       {[1, 2, 3, 4].map(s => (
-        <div key={s} style={{ 
+        <div key={s} className="dot" style={{ 
           width: '12px', height: '12px', borderRadius: '50%', 
           background: step === s ? '#d4af37' : step > s ? '#f3e5ab' : '#333',
           boxShadow: step === s ? '0 0 10px #d4af37' : 'none',

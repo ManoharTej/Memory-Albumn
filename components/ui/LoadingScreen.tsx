@@ -27,7 +27,7 @@ const PolaroidLetter = ({ char }: { char: string }) => (
     opacity: 0,
     // Transforms are applied entirely via Anime.js to prevent hydration errors
   }}>
-    <div style={{
+    <div className="polaroid-inner" style={{
       width: '80px', height: '80px',
       background: 'linear-gradient(135deg, #2a081a, #1a0b1c)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
