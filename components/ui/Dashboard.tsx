@@ -193,7 +193,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div style={{ width: '100%', maxWidth: '800px', background: 'rgba(255, 255, 255, 0.03)', padding: '20px 30px', borderRadius: '24px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: '0 20px 50px rgba(0,0,0,0.5)', zIndex: 2, display: 'flex', flexDirection: 'column', flex: 1, maxHeight: '100%', overflow: 'hidden' }}>
+      <div className="mobile-landscape-scale" style={{ width: '100%', maxWidth: '800px', background: 'rgba(255, 255, 255, 0.03)', padding: '20px 30px', borderRadius: '24px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: '0 20px 50px rgba(0,0,0,0.5)', zIndex: 2, display: 'flex', flexDirection: 'column', flex: 1, maxHeight: '100%', overflow: 'hidden' }}>
         
         <h1 style={{ textAlign: 'center', fontFamily: 'serif', fontSize: '2rem', marginBottom: '5px', color: '#e8d5b5', flexShrink: 0 }}>Craft Your Story</h1>
         <p style={{ textAlign: 'center', color: '#dcc6d2', opacity: 0.8, marginBottom: '20px', fontStyle: 'italic', flexShrink: 0 }}>Design a magical 3D memory album for your friends, family, or someone special</p>

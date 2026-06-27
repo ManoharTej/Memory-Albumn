@@ -114,7 +114,6 @@ html, body {
   background-color: var(--color-midnight);
   color: var(--color-text);
   font-family: var(--font-body);
-  touch-action: none; /* Prevent all native touch scrolling/zooming */
   -webkit-overflow-scrolling: none;
   overscroll-behavior: none; /* Prevent pull-to-refresh bounce */
 }
@@ -349,5 +348,13 @@ body {
   input, textarea, button {
     padding: var(--space-2) var(--space-3) !important;
     font-size: var(--text-sm) !important;
+  }
+}
+
+/* ── Mobile Landscape Scaling ────────────────────────────── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .mobile-landscape-scale {
+    transform: scale(0.65);
+    transform-origin: center center;
   }
 }

@@ -197,7 +197,7 @@ export default function LoadingScreen() {
         ))}
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px', zIndex: 10 }}>
+      <div className="mobile-landscape-scale" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '30px', zIndex: 10 }}>
         
         {/* Unrolling Film Reel MEMORY */}
         <div className="film-reel-container" style={{
