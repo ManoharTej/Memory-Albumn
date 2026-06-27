@@ -193,19 +193,19 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div className="mobile-landscape-scale" style={{ width: '100%', maxWidth: '800px', background: 'rgba(255, 255, 255, 0.03)', padding: '20px 30px', borderRadius: '24px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: '0 20px 50px rgba(0,0,0,0.5)', zIndex: 2, display: 'flex', flexDirection: 'column', flex: 1, maxHeight: '100%', overflow: 'hidden' }}>
+      <div className="dashboard-wrapper" style={{ width: '100%', maxWidth: '800px', background: 'rgba(255, 255, 255, 0.03)', padding: '20px 30px', borderRadius: '24px', backdropFilter: 'blur(10px)', border: '1px solid rgba(255, 255, 255, 0.05)', boxShadow: '0 20px 50px rgba(0,0,0,0.5)', zIndex: 2, display: 'flex', flexDirection: 'column', flex: 1, maxHeight: '100%', overflow: 'hidden' }}>
         
-        <h1 style={{ textAlign: 'center', fontFamily: 'serif', fontSize: '2rem', marginBottom: '5px', color: '#e8d5b5', flexShrink: 0 }}>Craft Your Story</h1>
-        <p style={{ textAlign: 'center', color: '#dcc6d2', opacity: 0.8, marginBottom: '20px', fontStyle: 'italic', flexShrink: 0 }}>Design a magical 3D memory album for your friends, family, or someone special</p>
+        <h1 className="dashboard-title" style={{ textAlign: 'center', fontFamily: 'serif', fontSize: '2rem', marginBottom: '5px', color: '#e8d5b5', flexShrink: 0 }}>Craft Your Story</h1>
+        <p className="dashboard-subtitle" style={{ textAlign: 'center', color: '#dcc6d2', opacity: 0.8, marginBottom: '20px', fontStyle: 'italic', flexShrink: 0 }}>Design a magical 3D memory album for your friends, family, or someone special</p>
         
         <div style={{ flexShrink: 0 }}>
           {renderStepIndicators()}
         </div>
 
         {step === 1 && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeIn 0.5s', flex: 1, overflowY: 'auto', minHeight: 0 }}>
+          <div className="step-container" style={{ display: 'flex', flexDirection: 'column', gap: '20px', animation: 'fadeIn 0.5s', flex: 1, overflowY: 'auto', minHeight: 0 }}>
             <div>
-              <label style={{ display: 'block', marginBottom: '10px', color: '#e8d5b5', fontWeight: 'bold' }}>Album Title</label>
+              <label className="dashboard-label" style={{ display: 'block', marginBottom: '10px', color: '#e8d5b5', fontWeight: 'bold' }}>Album Title</label>
               <input 
                 type="text" 
                 value={title} 
@@ -215,8 +215,9 @@ export default function Dashboard() {
               />
             </div>
             <div>
-              <label style={{ display: 'block', marginBottom: '10px', color: '#e8d5b5', fontWeight: 'bold' }}>Upload Your Photos (Max 30)</label>
+              <label className="dashboard-label" style={{ display: 'block', marginBottom: '10px', color: '#e8d5b5', fontWeight: 'bold' }}>Upload Your Photos (Max 30)</label>
               <div 
+                className="upload-box"
                 onClick={() => fileInputRef.current?.click()}
                 style={{ width: '100%', padding: '40px', background: 'rgba(212,175,55,0.05)', border: '2px dashed rgba(212,175,55,0.4)', borderRadius: '12px', textAlign: 'center', cursor: 'pointer', color: '#e8d5b5', transition: 'all 0.2s' }}
                 onMouseOver={(e) => e.currentTarget.style.background = 'rgba(212,175,55,0.1)'}
@@ -227,6 +228,7 @@ export default function Dashboard() {
               <input type="file" ref={fileInputRef} multiple accept="image/*" onChange={handleFiles} style={{ display: 'none' }} />
             </div>
             <button 
+              className="next-btn"
               disabled={!title || draftMemories.length === 0} 
               onClick={() => setStep(2)}
               style={{ alignSelf: 'flex-end', marginTop: '20px', padding: '15px 40px', background: 'linear-gradient(45deg, #d4af37, #f3e5ab)', border: 'none', borderRadius: '30px', color: '#1a1025', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer', opacity: (!title || draftMemories.length === 0) ? 0.5 : 1, boxShadow: '0 4px 15px rgba(212,175,55,0.3)' }}

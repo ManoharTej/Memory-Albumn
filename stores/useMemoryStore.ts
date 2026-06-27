@@ -197,7 +197,7 @@ export const useMemoryStore = create<MemoryState>((set, get) => ({
   getQualitySettings: () => {
     const isMobile = get().isMobile;
     return {
-      dpr: isMobile ? 1 : [1, 2],
+      dpr: isMobile ? [1, 1.5] : [1, 2],
       shadowsEnabled: !isMobile,
       candleCount: isMobile ? 2 : 4,
       butterflyCount: isMobile ? 1 : 3,

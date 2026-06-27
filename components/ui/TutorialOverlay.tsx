@@ -107,10 +107,10 @@ export default function TutorialOverlay() {
       </div>
 
       {/* Bottom Dialog Box */}
-      <div style={{
+      <div className="tutorial-container" style={{
         padding: '2rem', display: 'flex', justifyContent: 'center', pointerEvents: 'auto', marginBottom: '2rem'
       }}>
-        <div style={{
+        <div className="tutorial-box" style={{
           background: 'rgba(20, 10, 25, 0.85)',
           border: '1px solid rgba(212, 175, 55, 0.4)',
           borderRadius: '12px',
@@ -123,10 +123,10 @@ export default function TutorialOverlay() {
           fontFamily: "'Playfair Display', serif",
           animation: 'fadeIn 0.5s ease-out'
         }}>
-          <h3 style={{ color: '#d4af37', fontSize: '1.8rem', marginBottom: '1rem', marginTop: 0 }}>
+          <h3 className="tutorial-title" style={{ color: '#d4af37', fontSize: '1.8rem', marginBottom: '1rem', marginTop: 0 }}>
             {currentDialogue.title}
           </h3>
-          <p style={{ 
+          <p className="tutorial-text" style={{ 
             fontSize: '1.2rem', lineHeight: '1.6', margin: 0, color: '#e8d5b5',
             fontFamily: 'sans-serif'
           }}>
