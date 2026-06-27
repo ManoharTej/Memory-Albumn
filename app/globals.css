@@ -482,27 +482,10 @@ body {
     height: 80px !important;
   }
   
-  /* Loading Screen Portrait Scaling */
-  .film-reel-container {
-    width: 50px !important;
-    height: 50px !important;
-  }
-  .film-reel-text {
-    font-size: 2.2rem !important;
-    letter-spacing: 8px !important;
-    margin-left: 8px !important;
-  }
-  .polaroid-letter {
-    padding: 8px 8px 25px 8px !important;
-    margin: 0 -5px !important;
-  }
-  .polaroid-inner {
-    width: 45px !important;
-    height: 45px !important;
-    font-size: 1.8rem !important;
-  }
-  .loading-subtitle {
-    font-size: 0.95rem !important;
-    margin-top: 10px !important;
+  /* Loading Screen Portrait Scaling Container */
+  .mobile-portrait-scale {
+    transform: scale(0.6) !important;
+    transform-origin: center center !important;
+    width: 100% !important;
   }
 }
