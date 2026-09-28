@@ -39,7 +39,9 @@
 }
 
 .titleEditor {
-  flex-grow: 1;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
 }
@@ -384,21 +386,9 @@
   }
 }
 
-.titleText {
-  font-family: 'Cinzel Decorative', serif;
-  font-size: 2rem;
-  color: #ffca28;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
-  cursor: pointer;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 @media (max-width: 768px) {
   .titleText {
-    font-size: 1.4rem; /* 30% reduction */
+    font-size: 1.0rem; /* 50% reduction from 2rem */
   }
 }
 
