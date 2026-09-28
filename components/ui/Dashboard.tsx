@@ -118,6 +118,12 @@ export default function Dashboard() {
     setDraftMemories(newDrafts);
   };
 
+  const removeMemory = (index: number) => {
+    const newDrafts = [...draftMemories];
+    newDrafts.splice(index, 1);
+    setDraftMemories(newDrafts);
+  };
+
   const handleRandomizeLetter = (cat: LetterCategory) => {
     const letters = PRESET_LETTERS[cat];
     const text = letters[Math.floor(Math.random() * letters.length)];
@@ -255,6 +261,7 @@ export default function Dashboard() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', alignItems: 'center' }}>
                     <button onClick={() => moveMemory(i, -1)} disabled={i === 0} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', cursor: i === 0 ? 'not-allowed' : 'pointer', opacity: i === 0 ? 0.3 : 1, padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>▲</button>
                     <button onClick={() => moveMemory(i, 1)} disabled={i === draftMemories.length - 1} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: '#fff', cursor: i === draftMemories.length - 1 ? 'not-allowed' : 'pointer', opacity: i === draftMemories.length - 1 ? 0.3 : 1, padding: '4px 8px', borderRadius: '4px', fontSize: '0.7rem' }}>▼</button>
+                    <button onClick={() => removeMemory(i)} style={{ background: 'transparent', border: '1px solid rgba(255,100,100,0.4)', color: '#ff6b6b', cursor: 'pointer', padding: '4px 8px', borderRadius: '4px', fontSize: '0.8rem', marginTop: '5px' }}>🗑️</button>
                   </div>
                   <img src={draft.photoUrl} alt="preview" className="memory-img" style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '8px', border: '2px solid rgba(212,175,55,0.3)' }} />
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '10px' }}>
