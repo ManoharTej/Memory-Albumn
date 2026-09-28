@@ -245,10 +245,13 @@ export default function MemoryAlbumBook({ album, position }: MemoryAlbumBookProp
         <Text
           position={[coverMeshX, height / 2 + 0.002, 0]}
           rotation={[-Math.PI / 2, 0, 0]}
-          fontSize={0.15}
+          fontSize={album.title.length > 25 ? 0.07 : album.title.length > 12 ? 0.1 : 0.15}
+          maxWidth={width * 0.85}
           color="#d4af37"
           anchorX="center"
           anchorY="middle"
+          textAlign="center"
+          lineHeight={1.2}
         >
           {album.title}
         </Text>
