@@ -6,23 +6,23 @@ export default function ReceiverHelpButton() {
   const isReceiverMode = useMemoryStore((s) => s.isReceiverMode);
   const isCapturing = useMemoryStore((s) => s.isCapturing);
   const setScene = useMemoryStore((s) => s.setScene);
-  const tutorialCompleted = useMemoryStore((s) => s.tutorialCompleted);
+  const letterPhase = useMemoryStore((s) => s.letterPhase);
 
   const isMobile = useMemoryStore((s) => s.isMobile);
 
   // Only show for receivers, and hide during capture
   if (!isReceiverMode || isCapturing) return null;
 
+  // Unlock create the moment they open the envelope
+  const isCreateMode = letterPhase === 'open' || letterPhase === 'reading';
+
   const handleClick = () => {
-    if (tutorialCompleted) {
+    if (isCreateMode) {
       setScene('creation');
     } else {
       setScene('tutorial');
     }
   };
-
-  // After tutorial done, glow gold as "Create Your Own"
-  const isCreateMode = tutorialCompleted;
 
   return (
     <>
