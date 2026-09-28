@@ -45,22 +45,24 @@ function useDeviceDetection() {
 function PostEffects() {
   const deviceTier = useMemoryStore((s) => s.deviceTier);
 
-  // Skip heavy effects on low-tier devices
-  if (deviceTier === 'low') return null;
+  // Soft glow on mobile instead of completely disabling effects
+  const bloomIntensity = deviceTier === 'high' ? 1.5 : (deviceTier === 'mid' ? 1.0 : 0.6);
 
   return (
     <EffectComposer>
       <Bloom 
-        luminanceThreshold={0.6} 
+        luminanceThreshold={0.5} 
         luminanceSmoothing={0.9} 
-        intensity={deviceTier === 'high' ? 1.5 : 1.0} 
+        intensity={bloomIntensity} 
         mipmapBlur 
       />
-      <Vignette 
-        offset={0.5} 
-        darkness={0.7} 
-        blendFunction={BlendFunction.NORMAL} 
-      />
+      {deviceTier !== 'low' && (
+        <Vignette 
+          offset={0.5} 
+          darkness={0.7} 
+          blendFunction={BlendFunction.NORMAL} 
+        />
+      )}
     </EffectComposer>
   );
 }
