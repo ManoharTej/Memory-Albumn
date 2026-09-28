@@ -388,7 +388,10 @@
 
 @media (max-width: 768px) {
   .titleText {
-    font-size: 1.0rem; /* 50% reduction from 2rem */
+    font-size: 0.7rem; /* 30% reduction from 1rem */
+  }
+  .titleEditor {
+    transform: translateX(-50%) translateY(-30px);
   }
 }
 
