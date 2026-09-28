@@ -360,8 +360,12 @@ function LetterPage3D({ position, rotation, letterConfig, isActive }: { position
         x: localEuler.x, y: localEuler.y, z: localEuler.z,
         duration: 1.5, ease: "power3.inOut"
       }, "<");
+      // Scale down if device is in portrait (narrow screen)
+      const isPortrait = typeof window !== 'undefined' && window.innerHeight > window.innerWidth;
+      const readingScale = isPortrait ? 0.8 : 1.4;
+
       tl.to(letterRef.current.scale, {
-        x: 1.4, y: 1.4, z: 1.4,
+        x: readingScale, y: readingScale, z: readingScale,
         duration: 1.5, ease: "power3.inOut"
       }, "<");
     } else if (isActive === false && phase !== 'closed') {
