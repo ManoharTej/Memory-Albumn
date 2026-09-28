@@ -144,6 +144,11 @@ export default function LoadingScreen() {
   }, []);
 
   const handleEnter = useCallback(() => {
+    // Attempt fullscreen
+    if (typeof document !== 'undefined' && document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
+
     setFadeOut(true);
     setTimeout(() => {
       setVisible(false);

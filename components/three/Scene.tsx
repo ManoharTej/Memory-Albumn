@@ -28,7 +28,8 @@ function useDeviceDetection() {
 
   useEffect(() => {
     const width = window.innerWidth;
-    const isMobile = width < 768;
+    const isMobileDevice = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
+    const isMobile = width < 768 || isMobileDevice;
     setIsMobile(isMobile);
 
     if (isMobile) {

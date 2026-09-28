@@ -3,6 +3,7 @@
 import { useMemoryStore } from '@/stores/useMemoryStore';
 
 export default function WatermarkOverlay() {
+  const isMobile = useMemoryStore(s => s.isMobile);
   const isCapturing = useMemoryStore(s => s.isCapturing);
 
   if (isCapturing) return null;
@@ -12,7 +13,7 @@ export default function WatermarkOverlay() {
       className="watermark-container"
       style={{
         position: 'fixed',
-        bottom: '20px',
+        bottom: isMobile ? '10px' : '20px',
         left: '0',
         width: '100%',
         textAlign: 'center',
@@ -25,8 +26,8 @@ export default function WatermarkOverlay() {
       <p style={{
         fontFamily: '"Cinzel Decorative", serif',
         color: 'rgba(255, 255, 255, 0.8)',
-        fontSize: '12px',
-        letterSpacing: '2px',
+        fontSize: isMobile ? '8px' : '12px',
+        letterSpacing: isMobile ? '1px' : '2px',
         margin: 0,
         textShadow: '0 2px 4px rgba(0,0,0,0.8), 0 0 10px rgba(255,215,0,0.3)'
       }}>

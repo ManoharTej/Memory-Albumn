@@ -7,6 +7,8 @@ export default function ReceiverHelpButton() {
   const isCapturing = useMemoryStore((s) => s.isCapturing);
   const setScene = useMemoryStore((s) => s.setScene);
 
+  const isMobile = useMemoryStore((s) => s.isMobile);
+
   // Only show for receivers, and hide during capture
   if (!isReceiverMode || isCapturing) return null;
 
@@ -16,15 +18,15 @@ export default function ReceiverHelpButton() {
         onClick={() => setScene('tutorial')}
         style={{
           position: 'fixed',
-          top: '2rem',
-          right: '2rem',
+          top: isMobile ? '1rem' : '2rem',
+          right: isMobile ? '1rem' : '2rem',
           zIndex: 40,
           background: 'rgba(255,255,255,0.1)',
           border: '1px solid rgba(212,175,55,0.4)',
           borderRadius: '20px',
-          padding: '8px 18px',
+          padding: isMobile ? '6px 12px' : '8px 18px',
           color: '#d4af37',
-          fontSize: '0.9rem',
+          fontSize: isMobile ? '0.7rem' : '0.9rem',
           fontWeight: 'bold',
           cursor: 'pointer',
           backdropFilter: 'blur(10px)',
