@@ -1,7 +1,15 @@
 'use server';
 
-import { kv } from '@vercel/kv';
+import { createClient } from '@vercel/kv';
 import type { MemoryAlbum } from '@/types';
+
+const url = process.env.KV_REST_API_URL || process.env.memoryalbumn_KV_REST_API_URL || "";
+const token = process.env.KV_REST_API_TOKEN || process.env.memoryalbumn_KV_REST_API_TOKEN || "";
+
+const kv = createClient({
+  url: url || "https://dummy.upstash.io",
+  token: token || "dummy",
+});
 
 export async function shareAlbumToKV(album: MemoryAlbum) {
   try {
