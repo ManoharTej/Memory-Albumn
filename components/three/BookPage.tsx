@@ -422,7 +422,7 @@ function LetterPage3D({ position, rotation, letterConfig, isActive }: { position
               <meshStandardMaterial color="#e6d534" transparent opacity={0.6} />
             </mesh>
             <group ref={letterRef} position={[0, 0, 0.002]}>
-              <Text position={[0, 0, 0]} fontSize={(letterConfig?.text?.length || 0) > 100 ? 0.016 : 0.024} color="#1a1a00" maxWidth={0.48} textAlign="center" lineHeight={1.5}>
+              <Text position={[0, 0, 0]} fontSize={0.024} color="#1a1a00" maxWidth={0.48} textAlign="center" lineHeight={1.5}>
                 {phase !== 'closed' ? (letterConfig?.text || "A little note just for you 💛") : "Tap to unfold 📌"}
               </Text>
             </group>
@@ -450,7 +450,7 @@ function LetterPage3D({ position, rotation, letterConfig, isActive }: { position
               </mesh>
               <Text
                 position={[0, 0, 0.0005]}
-                fontSize={(letterConfig?.text?.length || 0) > 250 ? 0.012 : (letterConfig?.text?.length || 0) > 150 ? 0.015 : 0.018}
+                fontSize={0.016}
                 color={textColor}
                 maxWidth={letW * 0.82}
                 textAlign="center"

@@ -252,6 +252,7 @@ export default function Dashboard() {
                 type="text" 
                 value={title} 
                 onChange={(e) => setTitle(e.target.value)}
+                maxLength={30}
                 placeholder="e.g. Our Summer Memories"
                 style={{ width: '100%', padding: '15px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(212,175,55,0.3)', borderRadius: '12px', color: '#fff', fontSize: '1.1rem', outline: 'none' }}
               />
@@ -392,7 +393,7 @@ export default function Dashboard() {
             <textarea 
               value={letterText}
               onChange={(e) => setLetterText(e.target.value)}
-              maxLength={letterStyle === 'sticky' ? 100 : 3000}
+              maxLength={letterStyle === 'sticky' ? 120 : 800}
               style={{ width: '100%', height: '180px', background: 'rgba(0,0,0,0.3)', border: '1px solid rgba(212,175,55,0.3)', color: '#fff', padding: '15px', borderRadius: '12px', resize: 'none', fontFamily: letterStyle === 'vintage' ? 'serif' : 'sans-serif', fontSize: '1.05rem', outline: 'none' }}
             />
 
