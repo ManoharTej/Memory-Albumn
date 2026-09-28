@@ -476,6 +476,7 @@ export default function StudyRoom() {
   const zoomedMemoryId = useMemoryStore((s) => s.zoomedMemoryId);
   const zoomedFrame = useMemoryStore((s) => s.zoomedFrame);
   const albums = useMemoryStore((s) => s.albums);
+  const isMobile = useMemoryStore((s) => s.isMobile);
   const isTransitioningRef = useRef(false);
 
   // Keep track of the currently displayed album so it doesn't instantly vanish when unselected
@@ -490,9 +491,11 @@ export default function StudyRoom() {
 
   // Initial Camera Framing (Low angle, moody)
   useEffect(() => {
-    camera.position.set(SCENE.camera.roomPosition[0], SCENE.camera.roomPosition[1], SCENE.camera.roomPosition[2]);
+    const startY = isMobile ? SCENE.camera.roomPosition[1] + 1.2 : SCENE.camera.roomPosition[1];
+    const startZ = isMobile ? SCENE.camera.roomPosition[2] + 4 : SCENE.camera.roomPosition[2];
+    camera.position.set(SCENE.camera.roomPosition[0], startY, startZ);
     camera.lookAt(new THREE.Vector3(SCENE.camera.lookTarget[0], SCENE.camera.lookTarget[1], SCENE.camera.lookTarget[2]));
-  }, [camera]);
+  }, [camera, isMobile]);
 
   const prevSelectedId = useRef<string | null>(null);
   const prevZoomedFrame = useRef<boolean>(false);
@@ -537,8 +540,8 @@ export default function StudyRoom() {
       // Exiting the wooden photo frame - zoom back to default desk position
       gsap.to(camera.position, {
         x: SCENE.camera.roomPosition[0],
-        y: SCENE.camera.roomPosition[1],
-        z: SCENE.camera.roomPosition[2],
+        y: isMobile ? SCENE.camera.roomPosition[1] + 1.2 : SCENE.camera.roomPosition[1],
+        z: isMobile ? SCENE.camera.roomPosition[2] + 4 : SCENE.camera.roomPosition[2],
         duration: 2.0,
         ease: "power2.inOut",
         onUpdate: () => {
@@ -549,8 +552,8 @@ export default function StudyRoom() {
       // Zoom into the Album Book
       gsap.to(camera.position, {
         x: SCENE.camera.bookZoomPosition[0],
-        y: SCENE.camera.bookZoomPosition[1],
-        z: SCENE.camera.bookZoomPosition[2],
+        y: isMobile ? SCENE.camera.bookZoomPosition[1] + 1.8 : SCENE.camera.bookZoomPosition[1],
+        z: isMobile ? SCENE.camera.bookZoomPosition[2] + 2.5 : SCENE.camera.bookZoomPosition[2],
         duration: 2.5,
         ease: "power2.inOut",
         onUpdate: () => {
@@ -561,8 +564,8 @@ export default function StudyRoom() {
       // Delay camera zoom out to allow the book cover to close first
       gsap.to(camera.position, {
         x: SCENE.camera.roomPosition[0],
-        y: SCENE.camera.roomPosition[1],
-        z: SCENE.camera.roomPosition[2],
+        y: isMobile ? SCENE.camera.roomPosition[1] + 1.2 : SCENE.camera.roomPosition[1],
+        z: isMobile ? SCENE.camera.roomPosition[2] + 4 : SCENE.camera.roomPosition[2],
         duration: 2.5,
         delay: 1.0, // Wait 1 second for cover to close
         ease: "power2.inOut",

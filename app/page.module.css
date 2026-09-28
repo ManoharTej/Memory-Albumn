@@ -364,3 +364,22 @@
     opacity: 0;
   }
 }
+
+/* ── Phase 6: Mobile Adaptability ── */
+@media (max-width: 768px) {
+  .titleText {
+    font-size: 1.2rem !important;
+  }
+  .titleInput {
+    font-size: 1.2rem !important;
+  }
+  .topBar {
+    padding: 1rem !important;
+  }
+  .navArrows {
+    padding: 0 0.5rem !important;
+  }
+  .captureText {
+    display: none !important;
+  }
+}

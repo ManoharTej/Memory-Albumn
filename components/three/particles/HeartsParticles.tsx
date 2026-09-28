@@ -16,6 +16,7 @@ export default function HeartsParticles({ isZoomed }: { isZoomed: boolean }) {
   const heartMeshRef = useRef<THREE.InstancedMesh>(null);
   const balloonMeshRef = useRef<THREE.InstancedMesh>(null);
   const count = 250; // 15 big hearts, 235 blast hearts!
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
 
   const dummy = useMemo(() => new THREE.Object3D(), []);
   
@@ -31,7 +32,7 @@ export default function HeartsParticles({ isZoomed }: { isZoomed: boolean }) {
           -0.02 - Math.random() * (isBigHeart ? 0.1 : 4.0)                     // Blast has deep background depth
         ),
         speed: Math.random() * 0.03 + (isBigHeart ? 0.015 : 0.03),
-        baseScale: Math.random() * 0.06 + (isBigHeart ? 0.04 : 0.02),
+        baseScale: (Math.random() * 0.06 + (isBigHeart ? 0.04 : 0.02)) * (isMobile ? 0.3 : 1.0),
         wobbleSpeed: Math.random() * 3 + 1,
         delay: isBigHeart ? Math.random() * 1.0 : 1.8 + Math.random() * 0.8, // Blast waits ~1.8s for the pops
         state: 'waiting', // waiting, heart, stopped, popping, balloon, blast

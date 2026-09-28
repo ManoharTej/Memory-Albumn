@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { useMemoryStore } from '@/stores/useMemoryStore';
+import styles from '@/app/page.module.css';
 
 // Camera SVG icon
 const CameraIcon = () => (
@@ -161,10 +162,10 @@ export default function CaptureOverlay() {
       {!capturedMedia && !isCapturing && !isRecording && (
         <div style={{ position: 'fixed', bottom: '2rem', right: '2rem', zIndex: 40, display: 'flex', gap: '0.75rem' }}>
           <button onClick={takePhoto} style={btnBase} title="Capture the scene">
-            <CameraIcon /> Capture
+            <CameraIcon /> <span className={styles.captureText}>Capture</span>
           </button>
           <button onClick={startRecording} style={btnBase} title="Record video">
-            <RecordIcon /> Record
+            <RecordIcon /> <span className={styles.captureText}>Record</span>
           </button>
         </div>
       )}
