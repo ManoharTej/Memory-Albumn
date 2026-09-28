@@ -368,10 +368,14 @@
 /* ── Phase 6: Mobile Adaptability ── */
 @media (max-width: 768px) {
   .titleText {
-    font-size: 1.2rem !important;
+    font-size: 0.9rem !important;
   }
   .titleInput {
-    font-size: 1.2rem !important;
+    font-size: 0.9rem !important;
+  }
+  .titleEditor {
+    justify-content: flex-start !important;
+    padding-left: 1rem;
   }
   .topBar {
     padding: 1rem !important;
