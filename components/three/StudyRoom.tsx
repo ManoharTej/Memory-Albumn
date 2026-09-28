@@ -552,8 +552,8 @@ export default function StudyRoom() {
       // Zoom into the Album Book
       gsap.to(camera.position, {
         x: SCENE.camera.bookZoomPosition[0],
-        y: isMobile ? SCENE.camera.bookZoomPosition[1] + 0.9 : SCENE.camera.bookZoomPosition[1],
-        z: isMobile ? SCENE.camera.bookZoomPosition[2] + 1.25 : SCENE.camera.bookZoomPosition[2],
+        y: isMobile ? SCENE.camera.bookZoomPosition[1] + 0.45 : SCENE.camera.bookZoomPosition[1],
+        z: isMobile ? SCENE.camera.bookZoomPosition[2] + 0.625 : SCENE.camera.bookZoomPosition[2],
         duration: 2.5,
         ease: "power2.inOut",
         onUpdate: () => {

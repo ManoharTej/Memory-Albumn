@@ -109,7 +109,7 @@ function startFlight(el: HTMLElement, index: number) {
       rotateZ,
       rotateX: (Math.random() - 0.5) * 45, // slow tumbling
       rotateY: (Math.random() - 0.5) * 45,
-      scale: (0.85 + Math.random() * 0.3) * (useMemoryStore.getState().isMobile ? 0.3 : 1.0),
+      scale: (0.85 + Math.random() * 0.3) * (useMemoryStore.getState().isMobile ? 0.45 : 1.0),
       duration: dur,
       // easeInOutSine makes it beautifully accelerate and decelerate into gentle curves
       easing: 'easeInOutSine', 

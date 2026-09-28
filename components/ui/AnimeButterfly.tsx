@@ -64,7 +64,7 @@ export default function AnimeButterfly({ delay = 0 }: { delay?: number }) {
         rotateZ,
         rotateX,
         rotateY: tumbleY,
-        scale: (1.0 + Math.random() * 0.4) * (typeof window !== 'undefined' && window.innerWidth < 768 ? 0.3 : 1.0),
+        scale: (1.0 + Math.random() * 0.4) * (typeof window !== 'undefined' && window.innerWidth < 768 ? 0.45 : 1.0),
         duration: 500 + Math.random() * 900,
         easing: 'easeInOutQuad',
         complete: flyRandomly
