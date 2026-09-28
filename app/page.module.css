@@ -368,14 +368,10 @@
 /* ── Phase 6: Mobile Adaptability ── */
 @media (max-width: 768px) {
   .titleText {
-    font-size: 0.9rem !important;
+    font-size: 1.2rem !important;
   }
   .titleInput {
-    font-size: 0.9rem !important;
-  }
-  .titleEditor {
-    justify-content: flex-start !important;
-    padding-left: 1rem;
+    font-size: 1.2rem !important;
   }
   .topBar {
     padding: 1rem !important;
@@ -387,3 +383,22 @@
     display: none !important;
   }
 }
+
+.titleText {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 2rem;
+  color: #ffca28;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+  cursor: pointer;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .titleText {
+    font-size: 1.4rem; /* 30% reduction */
+  }
+}
+

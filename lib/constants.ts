@@ -82,9 +82,9 @@ export const SCENE = {
   },
   particles: {
     dustCount:     50,
-    dustCountMobile: 10,
+    dustCountMobile: 30,
     fireflyCount:  8,
-    fireflyCountMobile: 2,
+    fireflyCountMobile: 4,
     paperCount:    0,
     paperCountMobile: 0,
   },

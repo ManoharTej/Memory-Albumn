@@ -201,7 +201,7 @@ export const useMemoryStore = create<MemoryState>((set, get) => ({
       shadowsEnabled: !isMobile,
       candleCount: isMobile ? 2 : 4,
       butterflyCount: isMobile ? 1 : 3,
-      firefliesEnabled: true,
+      firefliesEnabled: !isMobile,
       loadingBooksCount: isMobile ? 12 : 60,
     };
   },
