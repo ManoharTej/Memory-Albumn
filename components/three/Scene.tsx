@@ -49,6 +49,19 @@ function PostEffects() {
   // Soft glow on mobile instead of completely disabling effects
   const bloomIntensity = deviceTier === 'high' ? 1.5 : (deviceTier === 'mid' ? 1.0 : 0.6);
 
+  if (deviceTier === 'low') {
+    return (
+      <EffectComposer>
+        <Bloom 
+          luminanceThreshold={0.5} 
+          luminanceSmoothing={0.9} 
+          intensity={bloomIntensity} 
+          mipmapBlur 
+        />
+      </EffectComposer>
+    );
+  }
+
   return (
     <EffectComposer>
       <Bloom 
@@ -57,13 +70,11 @@ function PostEffects() {
         intensity={bloomIntensity} 
         mipmapBlur 
       />
-      {deviceTier !== 'low' ? (
-        <Vignette 
-          offset={0.5} 
-          darkness={0.7} 
-          blendFunction={BlendFunction.NORMAL} 
-        />
-      ) : null}
+      <Vignette 
+        offset={0.5} 
+        darkness={0.7} 
+        blendFunction={BlendFunction.NORMAL} 
+      />
     </EffectComposer>
   );
 }
