@@ -90,7 +90,7 @@ export default function TutorialOverlay() {
   const handleSkip = () => {
     selectAlbum(null);
     setZoomedFrame(false);
-    setScene('world');
+    setScene('viewing');
   };
 
   // Create — only for non-receiver mode, or after tutorial fully complete in receiver mode
