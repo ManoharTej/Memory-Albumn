@@ -56,13 +56,13 @@ function PostEffects() {
         intensity={bloomIntensity} 
         mipmapBlur 
       />
-      {deviceTier !== 'low' && (
+      {deviceTier !== 'low' ? (
         <Vignette 
           offset={0.5} 
           darkness={0.7} 
           blendFunction={BlendFunction.NORMAL} 
         />
-      )}
+      ) : null}
     </EffectComposer>
   );
 }
