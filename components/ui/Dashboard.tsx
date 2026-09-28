@@ -9,9 +9,8 @@ import { compressImage } from '@/lib/compress';
 
 interface DraftMemory {
   id: string;
-  file: File;
-  photoUrl: string; // Local blob URL for immediate UI
-  cloudUrl?: string; // Firebase storage URL
+  photoUrl: string; // Base64
+  cloudUrl?: string;
   isUploading?: boolean;
   quote: string;
 }
@@ -40,6 +39,9 @@ const FloatingPolaroid = ({ delay, left, top, rotate }: { delay: string, left: s
   </div>
 );
 
+import { get as getIDB, set as setIDB, del as delIDB } from 'idb-keyval';
+import { useEffect } from 'react';
+
 export default function Dashboard() {
   const scene = useMemoryStore((s) => s.scene);
   const setScene = useMemoryStore((s) => s.setScene);
@@ -66,6 +68,30 @@ export default function Dashboard() {
   const frameFileInputRef = useRef<HTMLInputElement>(null);
   const [isCompressing, setIsCompressing] = useState(false);
 
+  // Load from IndexedDB on mount
+  useEffect(() => {
+    getIDB('memory_album_draft').then((draft: any) => {
+      if (draft) {
+        if (draft.title) setTitle(draft.title);
+        if (draft.draftMemories) setDraftMemories(draft.draftMemories);
+        if (draft.letterStyle) setLetterStyle(draft.letterStyle);
+        if (draft.letterCategory) setLetterCategory(draft.letterCategory);
+        if (draft.letterText) setLetterText(draft.letterText);
+        if (draft.frameText) setFrameText(draft.frameText);
+        if (draft.framePhotoUrl) setFramePhotoUrl(draft.framePhotoUrl);
+        if (draft.step) setStep(draft.step);
+      }
+    }).catch(console.error);
+  }, []);
+
+  // Save to IndexedDB whenever state changes
+  useEffect(() => {
+    if (scene !== 'creation') return;
+    setIDB('memory_album_draft', {
+      title, draftMemories, letterStyle, letterCategory, letterText, frameText, framePhotoUrl, step
+    }).catch(console.error);
+  }, [title, draftMemories, letterStyle, letterCategory, letterText, frameText, framePhotoUrl, step, scene]);
+
   // Only render during creation phase!
   if (scene !== 'creation') return null;
 
@@ -81,7 +107,6 @@ export default function Dashboard() {
 
         return {
           id,
-          file,
           photoUrl: compressedBase64,
           quote: '',
           isUploading: false
@@ -159,6 +184,9 @@ export default function Dashboard() {
     setDraftMemories([]);
     setTitle('');
     
+    // Clear the local cache since they finished!
+    delIDB('memory_album_draft').catch(console.error);
+
     selectAlbum(newAlbum.id);
     setScene('entering');
   };
