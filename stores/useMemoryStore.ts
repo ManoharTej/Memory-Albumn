@@ -47,6 +47,8 @@ interface MemoryState {
   setIsReceiverMode: (isReceiver: boolean) => void;
   isCapturing: boolean;
   setIsCapturing: (val: boolean) => void;
+  tutorialCompleted: boolean;
+  setTutorialCompleted: (val: boolean) => void;
   isExpired: boolean;
   setIsExpired: (expired: boolean) => void;
 
@@ -133,6 +135,8 @@ export const useMemoryStore = create<MemoryState>((set, get) => ({
   setIsReceiverMode: (isReceiver) => set({ isReceiverMode: isReceiver }),
   isCapturing: false,
   setIsCapturing: (val) => set({ isCapturing: val }),
+  tutorialCompleted: false,
+  setTutorialCompleted: (val) => set({ tutorialCompleted: val }),
   isExpired: false,
   setIsExpired: (expired) => set({ isExpired: expired }),
 

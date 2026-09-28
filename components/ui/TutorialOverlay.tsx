@@ -7,6 +7,8 @@ export default function TutorialOverlay() {
   const setScene = useMemoryStore(s => s.setScene);
   const selectAlbum = useMemoryStore(s => s.selectAlbum);
   const setZoomedFrame = useMemoryStore(s => s.setZoomedFrame);
+  const isReceiverMode = useMemoryStore(s => s.isReceiverMode);
+  const setTutorialCompleted = useMemoryStore(s => s.setTutorialCompleted);
   
   const selectedAlbumId = useMemoryStore(s => s.selectedAlbumId);
   const currentPage = useMemoryStore(s => s.currentPage);
@@ -22,6 +24,13 @@ export default function TutorialOverlay() {
   // Calculate max pages based on the demo album (which is albums[0])
   const currentAlbum = albums.find(a => a.id === selectedAlbumId) || albums[0];
   const maxPages = currentAlbum ? Math.ceil(currentAlbum.memories.length / 2) + 1 : 2;
+
+  // When step hits 10, mark tutorial as completed in global store
+  useEffect(() => {
+    if (step >= 10) {
+      setTutorialCompleted(true);
+    }
+  }, [step, setTutorialCompleted]);
 
   // Strict Sequential State Machine
   useEffect(() => {
@@ -72,12 +81,20 @@ export default function TutorialOverlay() {
     { title: "Step 8: Close the Album", text: "What a beautiful message! Click 'Close Album' to put the book away." }, // 7
     { title: "Step 9: The Photo Frame", text: "Notice the wooden photo frame? Click it once to close its hinged doors." }, // 8
     { title: "Step 10: A Special Memory", text: "Now, double-click the wooden frame to zoom in and see the magic twist!" }, // 9
-    { title: "You're a Pro!", text: "You know exactly how to use the magic album! Click 'Start Creating' to craft your own story." }, // 10
+    { title: "You've Explored Everything! 🎉", text: isReceiverMode ? "You've experienced the full magic! The ✨ Create button is now unlocked for you!" : "You know exactly how to use the magic album! Click 'Start Creating' to craft your own story." }, // 10
   ];
 
   const currentDialogue = dialogues[step];
 
-  const handleClose = () => {
+  // Skip — in receiver mode, just close tutorial back to world (no creation)
+  const handleSkip = () => {
+    selectAlbum(null);
+    setZoomedFrame(false);
+    setScene('world');
+  };
+
+  // Create — only for non-receiver mode, or after tutorial fully complete in receiver mode
+  const handleCreate = () => {
     selectAlbum(null);
     setZoomedFrame(false);
     setScene('creation');
@@ -88,22 +105,41 @@ export default function TutorialOverlay() {
       position: 'absolute', inset: 0, zIndex: 50, pointerEvents: 'none',
       display: 'flex', flexDirection: 'column', justifyContent: 'space-between'
     }}>
-      {/* Top right Skip/Create button */}
+      {/* Top right button */}
       <div style={{ padding: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
-        <button 
-          onClick={handleClose}
-          style={{
-            pointerEvents: 'auto',
-            padding: '12px 24px', background: 'rgba(0,0,0,0.6)', color: '#d4af37',
-            border: '1px solid #d4af37', borderRadius: '30px', cursor: 'pointer',
-            fontSize: '1rem', backdropFilter: 'blur(4px)', transition: 'all 0.2s',
-            fontWeight: 'bold', letterSpacing: '0.5px'
-          }}
-          onMouseOver={(e) => e.currentTarget.style.background = 'rgba(212,175,55,0.2)'}
-          onMouseOut={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.6)'}
-        >
-          {step === 10 ? 'Start Creating Now →' : 'Skip Demo & Start Creating →'}
-        </button>
+        {isReceiverMode ? (
+          // Receiver mode: only "Skip Demo" — no create option here
+          <button 
+            onClick={handleSkip}
+            style={{
+              pointerEvents: 'auto',
+              padding: '12px 24px', background: 'rgba(0,0,0,0.6)', color: '#d4af37',
+              border: '1px solid #d4af37', borderRadius: '30px', cursor: 'pointer',
+              fontSize: '1rem', backdropFilter: 'blur(4px)', transition: 'all 0.2s',
+              fontWeight: 'bold', letterSpacing: '0.5px'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(212,175,55,0.2)'}
+            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.6)'}
+          >
+            Skip Demo
+          </button>
+        ) : (
+          // Creator mode: always allow jumping to create
+          <button 
+            onClick={handleCreate}
+            style={{
+              pointerEvents: 'auto',
+              padding: '12px 24px', background: 'rgba(0,0,0,0.6)', color: '#d4af37',
+              border: '1px solid #d4af37', borderRadius: '30px', cursor: 'pointer',
+              fontSize: '1rem', backdropFilter: 'blur(4px)', transition: 'all 0.2s',
+              fontWeight: 'bold', letterSpacing: '0.5px'
+            }}
+            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(212,175,55,0.2)'}
+            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(0,0,0,0.6)'}
+          >
+            {step === 10 ? 'Start Creating Now →' : 'Skip Demo & Start Creating →'}
+          </button>
+        )}
       </div>
 
       {/* Bottom Dialog Box */}
