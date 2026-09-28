@@ -5,8 +5,8 @@ import type { MemoryAlbum } from '@/types';
 
 export async function shareAlbumToKV(album: MemoryAlbum) {
   try {
-    // Store the album stringified. Vercel KV automatically stringifies objects, but we do it manually to be safe.
-    await kv.set(`album:${album.id}`, JSON.stringify(album));
+    // Store the album stringified with a 7-day TTL (604800 seconds)
+    await kv.set(`album:${album.id}`, JSON.stringify(album), { ex: 604800 });
     return { success: true };
   } catch (error) {
     console.error("Failed to share album to KV:", error);

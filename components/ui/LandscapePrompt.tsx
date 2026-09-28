@@ -9,6 +9,7 @@ export default function LandscapePrompt() {
   
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   const [isPortraitOrientation, setIsPortraitOrientation] = useState(false);
+  const [isBypassed, setIsBypassed] = useState(false);
 
   useEffect(() => {
     const checkOrientation = () => {
@@ -20,6 +21,10 @@ export default function LandscapePrompt() {
       setIsPortraitOrientation(isPortrait);
       
       setIsPortraitStore(isMobile && isPortrait);
+      
+      // If they naturally correct the orientation, we can reset bypass
+      if (scene === 'creation' && isPortrait) setIsBypassed(false);
+      if (scene !== 'creation' && !isPortrait) setIsBypassed(false);
     };
 
     window.addEventListener('resize', checkOrientation);
@@ -31,10 +36,10 @@ export default function LandscapePrompt() {
       window.removeEventListener('resize', checkOrientation);
       window.removeEventListener('orientationchange', checkOrientation);
     };
-  }, [setIsPortraitStore]);
+  }, [setIsPortraitStore, scene]);
 
   // Only apply orientation locks on mobile devices
-  if (!isMobileDevice) return null;
+  if (!isMobileDevice || isBypassed) return null;
 
   // 1. Loading Phase: Allow both orientations
   if (scene === 'loading') return null;
@@ -57,6 +62,9 @@ export default function LandscapePrompt() {
             100% { transform: rotate(0deg); }
           }
         `}} />
+        <button onClick={() => setIsBypassed(true)} style={bypassButtonStyle}>
+          Continue Anyway
+        </button>
       </div>
     );
   }
@@ -78,9 +86,24 @@ export default function LandscapePrompt() {
           100% { transform: rotate(-90deg); }
         }
       `}} />
+      <button onClick={() => setIsBypassed(true)} style={bypassButtonStyle}>
+        Continue Anyway
+      </button>
     </div>
   );
 }
+
+const bypassButtonStyle: React.CSSProperties = {
+  marginTop: '2rem',
+  padding: '10px 20px',
+  background: 'transparent',
+  border: '1px solid rgba(212,175,55,0.4)',
+  color: '#e8d5b5',
+  borderRadius: '20px',
+  cursor: 'pointer',
+  fontSize: '0.9rem',
+  fontFamily: 'sans-serif'
+};
 
 const promptStyle: React.CSSProperties = {
   position: 'fixed',

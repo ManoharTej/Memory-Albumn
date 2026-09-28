@@ -5,6 +5,7 @@ import { useMemoryStore } from '@/stores/useMemoryStore';
 import { PRESET_QUOTES } from '@/lib/quotes';
 import { PRESET_LETTERS, LetterCategory } from '@/lib/letters';
 import type { LetterStyle } from '@/types';
+import { compressImage } from '@/lib/compress';
 
 interface DraftMemory {
   id: string;
@@ -59,37 +60,44 @@ export default function Dashboard() {
 
   // Wooden Frame State
   const [frameText, setFrameText] = useState('Every time you\nLIGHT THIS UP\nI hope you feel that\nTOGETHER IS MY\nFAVORITE\nPLACE TO BE');
-  const [framePhotoUrl, setFramePhotoUrl] = useState<string>(''); // Local blob
+  const [framePhotoUrl, setFramePhotoUrl] = useState<string>(''); // Base64
   const [frameCloudUrl, setFrameCloudUrl] = useState<string>(''); // Uploaded URL
   const [isFrameUploading, setIsFrameUploading] = useState(false);
   const frameFileInputRef = useRef<HTMLInputElement>(null);
+  const [isCompressing, setIsCompressing] = useState(false);
 
   // Only render during creation phase!
   if (scene !== 'creation') return null;
 
   const handleFiles = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
+      setIsCompressing(true);
       const newFiles = Array.from(e.target.files);
       
-      const newDrafts: DraftMemory[] = newFiles.map((file, index) => {
+      const newDrafts: DraftMemory[] = await Promise.all(newFiles.map(async (file, index) => {
         const id = `draft-${Date.now()}-${index}`;
+        // Compress the image before storing it in memory!
+        const compressedBase64 = await compressImage(file, 800, 800, 0.7);
 
         return {
           id,
           file,
-          photoUrl: URL.createObjectURL(file),
+          photoUrl: compressedBase64,
           quote: '',
           isUploading: false
         };
-      });
+      }));
       setDraftMemories(prev => [...prev, ...newDrafts].slice(0, 30));
+      setIsCompressing(false);
     }
   };
 
   const handleFrameFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
+      setIsFrameUploading(true);
       const file = e.target.files[0];
-      setFramePhotoUrl(URL.createObjectURL(file));
+      const compressedBase64 = await compressImage(file, 600, 600, 0.7);
+      setFramePhotoUrl(compressedBase64);
       setIsFrameUploading(false);
     }
   };
@@ -218,20 +226,20 @@ export default function Dashboard() {
               <label className="dashboard-label" style={{ display: 'block', marginBottom: '10px', color: '#e8d5b5', fontWeight: 'bold' }}>Upload Your Photos (Max 30)</label>
               <div 
                 className="upload-box"
-                onClick={() => fileInputRef.current?.click()}
-                style={{ width: '100%', padding: '40px', background: 'rgba(212,175,55,0.05)', border: '2px dashed rgba(212,175,55,0.4)', borderRadius: '12px', textAlign: 'center', cursor: 'pointer', color: '#e8d5b5', transition: 'all 0.2s' }}
-                onMouseOver={(e) => e.currentTarget.style.background = 'rgba(212,175,55,0.1)'}
-                onMouseOut={(e) => e.currentTarget.style.background = 'rgba(212,175,55,0.05)'}
+                onClick={() => !isCompressing && fileInputRef.current?.click()}
+                style={{ width: '100%', padding: '40px', background: 'rgba(212,175,55,0.05)', border: '2px dashed rgba(212,175,55,0.4)', borderRadius: '12px', textAlign: 'center', cursor: isCompressing ? 'wait' : 'pointer', color: '#e8d5b5', transition: 'all 0.2s', opacity: isCompressing ? 0.6 : 1 }}
+                onMouseOver={(e) => !isCompressing && (e.currentTarget.style.background = 'rgba(212,175,55,0.1)')}
+                onMouseOut={(e) => !isCompressing && (e.currentTarget.style.background = 'rgba(212,175,55,0.05)')}
               >
-                {draftMemories.length > 0 ? `✨ ${draftMemories.length} beautiful memories selected` : 'Click here to select your favorite photos'}
+                {isCompressing ? 'Optimizing photos...' : draftMemories.length > 0 ? `✨ ${draftMemories.length} beautiful memories selected` : 'Click here to select your favorite photos'}
               </div>
               <input type="file" ref={fileInputRef} multiple accept="image/*" onChange={handleFiles} style={{ display: 'none' }} />
             </div>
             <button 
               className="next-btn"
-              disabled={!title || draftMemories.length === 0} 
+              disabled={!title || draftMemories.length === 0 || isCompressing} 
               onClick={() => setStep(2)}
-              style={{ alignSelf: 'flex-end', marginTop: '20px', padding: '15px 40px', background: 'linear-gradient(45deg, #d4af37, #f3e5ab)', border: 'none', borderRadius: '30px', color: '#1a1025', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer', opacity: (!title || draftMemories.length === 0) ? 0.5 : 1, boxShadow: '0 4px 15px rgba(212,175,55,0.3)' }}
+              style={{ alignSelf: 'flex-end', marginTop: '20px', padding: '15px 40px', background: 'linear-gradient(45deg, #d4af37, #f3e5ab)', border: 'none', borderRadius: '30px', color: '#1a1025', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer', opacity: (!title || draftMemories.length === 0 || isCompressing) ? 0.5 : 1, boxShadow: '0 4px 15px rgba(212,175,55,0.3)' }}
             >
               Next: Arrange Memories &rarr;
             </button>

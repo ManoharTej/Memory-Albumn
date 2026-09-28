@@ -51,9 +51,8 @@ export default function MemoryApp() {
           // to trigger the smooth camera transition.
         })
         .catch(err => {
-          if (err.message === "EXPIRED") {
-            setIsExpired(true);
-          }
+          // Whether EXPIRED, NOT_FOUND, or a Network Error, we show the expired/error screen
+          setIsExpired(true);
         });
     }
   }, [fetchSharedAlbum, selectAlbum, setIsExpired, setIsReceiverMode]);

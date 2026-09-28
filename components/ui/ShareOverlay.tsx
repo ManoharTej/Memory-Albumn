@@ -25,49 +25,10 @@ export default function ShareOverlay() {
     setShareProgress('Starting upload...');
     
     try {
-      // Helper to convert blob URL to Base64
-      const blobToBase64 = async (blobUrl: string): Promise<string> => {
-        try {
-          const res = await fetch(blobUrl);
-          const blob = await res.blob();
-          return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result as string);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-          });
-        } catch (e) {
-          console.error("Failed to convert blob to base64", e);
-          return blobUrl; // Fallback
-        }
-      };
-      
       const newAlbum = { ...currentAlbum };
-      let completed = 0;
-      const totalPhotos = currentAlbum.memories.filter(m => m.photoUrl?.startsWith('blob:')).length + 
-                          (currentAlbum.framePhotoUrl?.startsWith('blob:') ? 1 : 0);
-
-      // 1. Convert memories (polaroids) to Base64
-      if (totalPhotos > 0) {
-        const newMemories = await Promise.all(currentAlbum.memories.map(async (mem, i) => {
-          if (mem.photoUrl && mem.photoUrl.startsWith('blob:')) {
-            const base64Str = await blobToBase64(mem.photoUrl);
-            completed++;
-            setShareProgress(`Compressing ${completed}/${totalPhotos}...`);
-            return { ...mem, photoUrl: base64Str };
-          }
-          return mem;
-        }));
-        newAlbum.memories = newMemories;
-
-        // 2. Convert frame photo to Base64
-        if (currentAlbum.framePhotoUrl && currentAlbum.framePhotoUrl.startsWith('blob:')) {
-          newAlbum.framePhotoUrl = await blobToBase64(currentAlbum.framePhotoUrl);
-          completed++;
-        }
-      }
-
-      // 3. Save to Firestore
+      
+      // Images are already compressed base64 webp from Dashboard.tsx
+      // 1. Save to KV (or Firestore if changed later)
       setShareProgress('Finalizing...');
       await shareAlbumToCloud(newAlbum);
 
